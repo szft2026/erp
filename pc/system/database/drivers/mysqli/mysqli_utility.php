@@ -147,13 +147,26 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 			$i = 0;
 			$field_str = '';
 			$is_int = array();
-			// 原 mysql 驱动用 mysql_fetch_field()，PHP 8 已移除 mysql 扩展，改用 CI 的 field_data()
-			foreach ($query->field_data() as $field)
+			// 原 mysql 驱动用 mysql_fetch_field()（PHP 8 已移除）。
+			// 直接对结果集调 field_data() 在 mysqli 下拿不到列名（会生成 ``, `` 这种空列），
+			// 改用 list_fields() 取列名、field_data($table) 取类型。
+			$fields = $this->db->list_fields($table);
+			$meta   = $this->db->field_data($table);
+			foreach ($fields as $fname)
 			{
-				$is_int[$i] = in_array(strtolower($field->type),
+				$ftype = '';
+				foreach ($meta as $m)
+				{
+					if (isset($m->name) && $m->name === $fname)
+					{
+						$ftype = $m->type;
+						break;
+					}
+				}
+				$is_int[$i] = in_array(strtolower($ftype),
 										array('tinyint', 'smallint', 'mediumint', 'int', 'bigint'),
 										TRUE) ? TRUE : FALSE;
-				$field_str .= '`'.$field->name.'`, ';
+				$field_str .= '`'.$fname.'`, ';
 				$i++;
 			}
 
