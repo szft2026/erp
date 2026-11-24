@@ -46,8 +46,9 @@
   				</tr>
   			    <?php foreach($list2 as $arr1=>$row1) {
 				if ($row['id']==$row1['invId']) {
-					$inqty         = $row1['qty']>0 ? abs($row1['qty']) : '';  //入库
-					$outqty        = $row1['qty']<0 ? abs($row1['qty']) : '';  //出库
+					// 空串参与累加在 PHP 8 会抛 TypeError，用 0
+					$inqty         = $row1['qty']>0 ? abs($row1['qty']) : 0;  //入库
+					$outqty        = $row1['qty']<0 ? abs($row1['qty']) : 0;  //出库
 					$sum1   += $inqty;                         //入库数量累加
 					$sum2   += $outqty;                        //出库数量累加
 					$totalqtys   = $row['qty']  + $sum1 - $sum2; //结存

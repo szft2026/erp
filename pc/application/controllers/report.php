@@ -1104,8 +1104,9 @@ class Report extends CI_Controller {
 			foreach ($list2 as $arr1=>$row1) {
 			    $arr = time() + $arr1;
 				if ($row['id']==$row1['invId']) {
-					$inqty         = $row1['qty']>0 ? abs($row1['qty']) : ''; 
-					$outqty        = $row1['qty']<0 ? abs($row1['qty']) : '';  
+					// 空串参与加法在 PHP 8 会抛 TypeError，这里用 0
+					$inqty         = $row1['qty']>0 ? abs($row1['qty']) : 0; 
+					$outqty        = $row1['qty']<0 ? abs($row1['qty']) : 0;  
 					$sum1   += $inqty;             
 					$sum2   += $outqty;            
 					$totalqtys   = $row['qty']  + $sum1 - $sum2;         
