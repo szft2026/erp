@@ -389,7 +389,11 @@ class Receipt extends CI_Controller {
     public function toPdf() {
         $this->common_model->checkpurview(207);
         $id   = $this->input->get_post('id',TRUE) ? str_enhtml($this->input->get_post('id',TRUE)) : 0;
-        $data            = str_enhtml($this->input->post(NULL,TRUE));
+        // 直接用打印链接（GET）时没有 POST，$this->input->post(NULL,TRUE) 返回 false，
+        // str_enhtml(false) 是字符串，count() 在 PHP 8 会抛 TypeError
+        $data            = $this->input->post(NULL,TRUE);
+        $data            = is_array($data) ? str_enhtml($data) : array();
+        if (count($data) < 1 && $id > 0) { $data = array('id' => $id); }
         if (count($data)>0) {
             $data['list'] = $this->data_model->get_invoice('a.id in ('.$id.') and a.transType=153001',2);
             if (count($data['list'])>0) {

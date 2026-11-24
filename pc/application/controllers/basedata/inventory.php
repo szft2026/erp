@@ -647,7 +647,9 @@ class Inventory extends CI_Controller {
 			} 
 		}
 		$data['warehousePropertys'] = isset($data['warehousePropertys']) ? $data['warehousePropertys'] :'[]';
-		$data['warehousePropertys'] = count(json_decode($data['warehousePropertys'],true))>0 ? $data['warehousePropertys'] :'';
+		// json_decode('') 返回 null，PHP 8 的 count(null) 直接抛 TypeError
+		$whp = json_decode($data['warehousePropertys'], true);
+		$data['warehousePropertys'] = (is_array($whp) && count($whp) > 0) ? $data['warehousePropertys'] : '';
 		return $data;
 	}  
 	
