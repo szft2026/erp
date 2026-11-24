@@ -175,8 +175,8 @@ function getTempData(a) {
 }
 function initField() {
 	if ($("#note").placeholder(), "edit" == oper) {
-		//if ($("#number").val(rowData.number), $("#name").val(rowData.name), $("#category").data("defItem", ["id", rowData.cCategory]), rowData.beginDate) {
-		if ($("#number").val(rowData.number), $("#name").val(rowData.name), $("#category").data("defItem", ["id", rowData.cCategory + ""]), rowData.beginDate) {
+		//if ($("#number").val(rowData.number), $("#name").val(rowData.name), $("#category").data("defItem", ["id", rowData.cCategory + ""]), rowData.beginDate) {
+		if ($("#number").val(rowData.number), $("#name").val(rowData.name), $("#category").data("defItem", ["id", rowData.cCategory]), rowData.beginDate) {
 			var a = new Date(rowData.beginDate),
 				b = a.getFullYear(),
 				c = 1 * a.getMonth() + 1,
