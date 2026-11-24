@@ -121,7 +121,12 @@ class Import extends CI_Controller {
         //move_uploaded_file($path["tmp_name"],$filePath);
         
         //$reader = new Excel_reader2(); // 实例化解析类Spreadsheet_Excel_Reader
-	    $reader = $this->excel_reader2;
+	    // 构造函数里虽然 load 了库，但属性可能没挂上，这里兜底直接实例化
+	    $reader = (isset($this->excel_reader2) && is_object($this->excel_reader2)) ? $this->excel_reader2 : null;
+	    if (!$reader) {
+	        require_once APPPATH.'libraries/excel/excel_reader2.php';
+	        $reader = new Excel_reader2();
+	    }
         $reader->setOutputEncoding("utf-8");    // 设置编码方式
         $reader->read("{$path['tmp_name']}");
         $data = $reader->sheets[0]['cells'];

@@ -913,6 +913,11 @@ class Excel_reader2 {
 	 *
 	 * Some basic initialisation
 	 */
+	// PHP 8 不再把「类名同名方法」当构造函数，这里显式转一次，否则 _ole 永远为 null
+	function __construct($file='',$store_extended_info=true,$outputEncoding='') {
+		$this->Excel_reader2($file,$store_extended_info,$outputEncoding);
+	}
+
 	function Excel_reader2($file='',$store_extended_info=true,$outputEncoding='') {
 		$this->_ole = new OLERead();
 		$this->setUTFEncoder('iconv');
