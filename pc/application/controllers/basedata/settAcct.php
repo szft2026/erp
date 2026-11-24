@@ -73,7 +73,7 @@ class Settacct extends CI_Controller {
 	public function add(){
 		$this->common_model->checkpurview(160);
 		$data = str_enhtml($this->input->post(NULL,TRUE));
-		if (count($data)>0) {
+		if (is_array($data) && count($data)>0) {
 			$data = $this->validform($data);
 			$info = elements(array('name','number','amount','date','type'),$data);
 			$sql  = $this->mysql_model->insert('account',$info);
@@ -90,7 +90,7 @@ class Settacct extends CI_Controller {
 	public function update(){
 		$this->common_model->checkpurview(161);
 		$data = str_enhtml($this->input->post(NULL,TRUE));
-		if (count($data)>0) {
+		if (is_array($data) && count($data)>0) {
 			$data = $this->validform($data);
 			$info = elements(array('name','number','amount','date','type'),$data);
 			$sql  = $this->mysql_model->update('account',$info,array('id'=>$data['id']));

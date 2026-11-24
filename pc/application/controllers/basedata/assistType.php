@@ -30,7 +30,7 @@ class Assisttype extends CI_Controller {
 		$this->common_model->checkpurview(59);
 		$type = $this->input->post('type',TRUE);
 		$data = str_enhtml($this->input->post(NULL,TRUE));
-		if (count($data)>0) {
+		if (is_array($data) && count($data)>0) {
 			strlen($data['name']) < 1 && str_alert(-1,'名称不能为空');
 			$this->mysql_model->get_count('assistingprop','(isDelete=0) and (name="'.$data['name'].'")') > 0 && str_alert(-1,'名称重复');
 			$sql = $this->mysql_model->insert('assistingprop',$data);
@@ -48,7 +48,7 @@ class Assisttype extends CI_Controller {
 	public function update(){
 		$this->common_model->checkpurview(59);
 		$data = str_enhtml($this->input->post(NULL,TRUE));
-		if (count($data)>0) {
+		if (is_array($data) && count($data)>0) {
 			$id   = intval($data['id']); 
 			unset($data['id']);
 			strlen($data['name']) < 1 && str_alert(-1,'名称不能为空');
@@ -69,7 +69,8 @@ class Assisttype extends CI_Controller {
 		$id = intval($this->input->get_post('id',TRUE));
 		$data = $this->mysql_model->get_rows('assistingprop','(id='.$id.')'); 
 		if (count($data)>0) {
-		    $this->mysql_model->get_count(GOODS,'(isDelete=0) and find_in_set('.$id.',skuAssistId)')>0 && str_alert(-1,'数据在使用中,不能删除'); 
+		    // GOODS 常量从未定义过，PHP 8 直接抛 Undefined constant，删除必然 500
+		    $this->mysql_model->get_count('goods','(isDelete=0) and find_in_set('.$id.',skuAssistId)')>0 && str_alert(-1,'数据在使用中,不能删除'); 
 			$info['isDelete'] = 1;
 			$sql = $this->mysql_model->update('assistingprop',$info,'(id='.$id.')');    
 		    if ($sql) {

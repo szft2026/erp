@@ -42,7 +42,7 @@ class Invlocation extends CI_Controller {
 	public function add(){
 		$this->common_model->checkpurview(156);
 		$data = str_enhtml($this->input->post(NULL,TRUE));
-		if (count($data)>0) {
+		if (is_array($data) && count($data)>0) {
 			$data = $this->validform($data);
 			$sql  = $this->mysql_model->insert('storage',elements(array('name','locationNo'),$data));
 			if ($sql) {
@@ -58,7 +58,7 @@ class Invlocation extends CI_Controller {
 	public function update(){
 		$this->common_model->checkpurview(157);
 		$data = str_enhtml($this->input->post(NULL,TRUE));
-		if (count($data)>0) {
+		if (is_array($data) && count($data)>0) {
 			$data = $this->validform($data);
 			$sql  = $this->mysql_model->update('storage',elements(array('name','locationNo'),$data),array('id'=>$data['locationId']));
 			if ($sql) {

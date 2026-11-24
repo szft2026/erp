@@ -47,7 +47,7 @@ class Employee extends CI_Controller {
 	public function add(){
 		$this->common_model->checkpurview(59);
 		$data = str_enhtml($this->input->post(NULL,TRUE));
-		if (count($data)>0) {
+		if (is_array($data) && count($data)>0) {
 			$data = $this->validform($data);
 			$this->mysql_model->get_count('staff',array('isDelete'=>0,'number'=>$data['number'])) > 0 && str_alert(-1,'员工编号重复');
 			$sql  = $this->mysql_model->insert('staff',elements(array('name','number'),$data));
@@ -64,7 +64,7 @@ class Employee extends CI_Controller {
 	public function update(){
 		$this->common_model->checkpurview(59);
 		$data = str_enhtml($this->input->post(NULL,TRUE));
-		if (count($data)>0) {
+		if (is_array($data) && count($data)>0) {
 			$data = $this->validform($data);
 			$this->mysql_model->get_count('staff',array('isDelete'=>0,'number'=>$data['number'],'id !='=>$data['id'])) > 0 && str_alert(-1,'员工编号重复');
 			$sql  = $this->mysql_model->update('staff',elements(array('name','number'),$data),array('id'=>$data['id']));

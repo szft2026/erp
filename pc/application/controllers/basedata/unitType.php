@@ -68,9 +68,10 @@ class Unittype extends CI_Controller {
 	public function delete(){
 		$this->common_model->checkpurview(59);
 		$id = intval($this->input->post('id',TRUE));
-		$data = $this->mysql_model->get_rows('unittype',array('isDelete'=>$isDelete,'id'=>$id)); 
+		// 原来用了未定义的 $isDelete，查询条件变成 isDelete IS NULL，永远查不到记录
+		$data = $this->mysql_model->get_rows('unittype',array('isDelete'=>0,'id'=>$id)); 
 		if (count($data)>0) {
-		    $this->mysql_model->get_count('unit',array('isDelete'=>$isDelete,'unittypeid'=>$id))>0 && str_alert(-1,'发生业务不可删除');
+		    $this->mysql_model->get_count('unit',array('isDelete'=>0,'unittypeid'=>$id))>0 && str_alert(-1,'发生业务不可删除');
 			$sql = $this->mysql_model->update('unittype',array('isDelete'=>1),array('id'=>$id));         
 		    if ($sql) {
 				$this->common_model->logs('删除单位组:ID='.$id.' 名称:'.$data['name']);

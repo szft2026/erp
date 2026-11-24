@@ -14,7 +14,7 @@ class Dataright extends CI_Controller {
 	
 	public function ar() {
 		$data = $this->input->post(NULL,TRUE);
-		if (count($data)>0) {
+		if (is_array($data) && count($data)>0) {
 		    $userName = str_enhtml($this->input->get('userName',TRUE));
 			$rightid  = (array)json_decode($data['rightid'],true);
 			$info['rightids'] = join(',',$rightid['rightids']);

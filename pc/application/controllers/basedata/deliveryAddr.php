@@ -39,7 +39,7 @@ class Deliveryaddr extends CI_Controller {
 	public function add(){
         $this->common_model->checkpurview(59);
 		$data = str_enhtml($this->input->post(NULL,TRUE));
-		if (count($data)>0) { 
+		if (is_array($data) && count($data)>0) { 
 			$sql = $this->mysql_model->insert('address',$data);
 			if ($sql) {
 				$data['id'] = $sql;
@@ -54,7 +54,7 @@ class Deliveryaddr extends CI_Controller {
 	public function update(){
 		$this->common_model->checkpurview(59);
 		$data = str_enhtml($this->input->post(NULL,TRUE));
-		if (count($data)>0) {
+		if (is_array($data) && count($data)>0) {
 			$id   = intval($data['id']); 
 			unset($data['id']);
 			$sql = $this->mysql_model->update('address',$data,array('id'=>$id));
