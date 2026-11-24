@@ -364,6 +364,7 @@ class InvPu extends CI_Controller {
     public function delete() {
 	    $this->common_model->checkpurview(4);
 		$id   = str_enhtml($this->input->get_post('id',TRUE));
+		if ($id === '') { str_alert(-1,'请选择单据'); }
 		$data = $this->mysql_model->get_results('invoice','(isDelete=0) and (id in('.$id.')) and billType="PUR"');  
 		if (count($data)>0) {
 		    foreach($data as $arr=>$row) {
@@ -468,6 +469,7 @@ class InvPu extends CI_Controller {
     public function batchCheckInvPu() {
 	    $this->common_model->checkpurview(86);
 	    $id   = str_enhtml($this->input->post('id',TRUE));
+		if ($id === '') { str_alert(-1,'请选择单据'); }
 		$data = $this->mysql_model->get_results('invoice','(id in('.$id.')) and billType="PUR" and isDelete=0');  
 		if (count($data)>0) {
 		    foreach($data as $arr=>$row) {
@@ -494,6 +496,7 @@ class InvPu extends CI_Controller {
     public function rsBatchCheckInvPu() {
 	    $this->common_model->checkpurview(87);
 	    $id   = str_enhtml($this->input->post('id',TRUE));
+		if ($id === '') { str_alert(-1,'请选择单据'); }
 	    $this->mysql_model->get_count('verifica_info','(billId='.$id.')')>0 && str_alert(-1,'存在关联的“付款单据”，无法删除！请先在“付款单”中删除该销货单！');//add
 		$data = $this->mysql_model->get_results('invoice','(id in('.$id.')) and billType="PUR" and isDelete=0');  
 		if (count($data)>0) {

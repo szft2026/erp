@@ -483,6 +483,7 @@ class InvSa extends CI_Controller {
     public function batchCheckInvSa() {
 	    $this->common_model->checkpurview(89);
 	    $id   = str_enhtml($this->input->post('id',TRUE));
+		if ($id === '') { str_alert(-1,'请选择单据'); }
 		$data = $this->mysql_model->get_results('invoice','(id in('.$id.')) and billType="SALE" and checked=0 and isDelete=0');  
 		if (count($data)>0) {
 			$sql = $this->mysql_model->update('invoice',array('checked'=>1,'checkName'=>$this->jxcsys['name']),'(id in('.$id.'))'); 
@@ -509,6 +510,7 @@ class InvSa extends CI_Controller {
     public function rsBatchCheckInvSa() {
 	    $this->common_model->checkpurview(90);
 	    $id   = str_enhtml($this->input->post('id',TRUE));
+		if ($id === '') { str_alert(-1,'请选择单据'); }
 	    $this->mysql_model->get_count('verifica_info','(billId='.$id.')')>0 && str_alert(-1,'存在关联“收款单据”，无法删除！请先在“收款单”中删除该销货单！');//add
 		$data = $this->mysql_model->get_results('invoice','(id in('.$id.')) and billType="SALE" and checked=1 and (isDelete=0)');   
 		if (count($data)>0) {

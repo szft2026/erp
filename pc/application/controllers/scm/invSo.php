@@ -390,6 +390,7 @@ class InvSo extends CI_Controller {
     public function batchcheckinvSo() {
 	    $this->common_model->checkpurview(194);
 	    $id   = str_enhtml($this->input->post('id',TRUE));
+		if ($id === '') { str_alert(-1,'请选择单据'); }
 		$data = $this->mysql_model->get_results('order','(id in('.$id.')) and billType="SALE" and checked=0 and isDelete=0');  
 		if (count($data)>0) {
 		    $this->mysql_model->get_count('invoice','(srcOrderId in('.$id.')) and isDelete=0')>0 && str_alert(-1,'有关联的销货单，不能对它进行审核！'); 
@@ -417,6 +418,7 @@ class InvSo extends CI_Controller {
     public function rsbatchcheckinvSo() {
 	    $this->common_model->checkpurview(195);
 	    $id   = str_enhtml($this->input->post('id',TRUE));
+		if ($id === '') { str_alert(-1,'请选择单据'); }
 		$data = $this->mysql_model->get_results('order','(id in('.$id.')) and billType="SALE" and checked=1 and (isDelete=0)');   
 		if (count($data)>0) {
 		    $this->mysql_model->get_count('invoice','(srcOrderId in('.$id.')) and isDelete=0')>0 && str_alert(-1,'有关联的销货单，不能对它进行反审核！'); 

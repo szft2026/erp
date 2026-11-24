@@ -27,6 +27,7 @@ class UserSetting extends CI_Controller {
 	
 	public function delete(){
 	    $key   = $this->input->post('key',TRUE);
+	    if (!is_string($key) || $key === '') { str_alert(-1,'参数错误'); }
 		$value = $this->input->post('value',TRUE);
 		$this->common_model->insert_option($key,$value); 
 	    die('{"status":200,"msg":"success"}');
