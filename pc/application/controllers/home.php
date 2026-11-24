@@ -53,6 +53,7 @@ class Home extends CI_Controller {
 	
 	public function set_password2(){
 	    $data = str_enhtml($this->input->post(NULL,TRUE));
+	    if (!is_array($data) || count($data) < 1) { str_alert(-1,'参数错误'); }
 	    $userId = $data['userId'];
 	    if (is_array($data)&&count($data)>0) {
 	        $info['userpwd'] = md5($data['password']);

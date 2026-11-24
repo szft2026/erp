@@ -82,6 +82,7 @@ class Unit extends CI_Controller {
 	
 	//公共验证
 	private function validform($data) {
+	    if (!is_array($data)) { $data = array(); }   // 空 POST 时上游传进来的是空字符串
         strlen($data['name']) < 1 && str_alert(-1,'单位名称不能为空');
 		$data['id']         = isset($data['id']) ? intval($data['id']) :0;
 		$data['rate']       = isset($data['rate']) ? intval($data['rate']) :0;

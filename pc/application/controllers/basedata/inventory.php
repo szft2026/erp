@@ -390,6 +390,7 @@ class Inventory extends CI_Controller {
 	public function delete(){
 		$this->common_model->checkpurview(71);
 		$id = str_enhtml($this->input->post('id',TRUE));
+		if ($id === '') { str_alert(-1,'请选择要删除的记录'); }
 		$data = $this->mysql_model->get_results('goods','(id in('.$id.')) and (isDelete=0)'); 
 		if (count($data) > 0) {
 		    $this->mysql_model->get_count('invoice_info','(invId in('.$id.')) and (isDelete=0) and (billType<>"INI")')>0 && str_alert(-1,'其中有商品发生业务不可删除');

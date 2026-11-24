@@ -247,6 +247,7 @@ class Assist extends CI_Controller {
 	
 	//公共验证
 	private function validform($data) {
+	    if (!is_array($data)) { $data = array(); }   // 空 POST 时上游传进来的是空字符串
 	    $data['typeNumber'] = str_enhtml($this->input->get_post('typeNumber',TRUE));  //结算方式是GET 
 		$data['id']         = isset($data['id']) ? intval($data['id']) :0;
 		$data['parentId']   = isset($data['parentId']) ? intval($data['parentId']):0;

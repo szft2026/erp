@@ -344,6 +344,7 @@ class Contact extends CI_Controller {
 	//删除
 	public function delete(){
 	    $id   = str_enhtml($this->input->post('id',TRUE));
+	    if ($id === '') { str_alert(-1,'请选择要删除的记录'); }
 		$type = intval($this->input->get_post('type',TRUE))==10 ? 10 : -10;
 		switch ($type) {
 			case 10:
