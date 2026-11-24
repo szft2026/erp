@@ -1,5 +1,5 @@
 function init() {
-	void 0 !== cRowId ? Public.ajaxPost("../basedata/contact/query?type=10&action=query", {
+	void 0 !== cRowId ? Public.ajaxPost("../basedata/contact/query?type=-10&action=query", {
 		id: cRowId
 	}, function(a) {
 		200 == a.status ? (rowData = a.data, initField(), initEvent(), initGrid(rowData.links)) : parent.$.dialog({
@@ -55,7 +55,7 @@ function initValidator() {
 			},
 			myRemote: function(a, b, c) {
 				return c.old.value === a.value || $(a).data("tip") === !1 && a.value.length > 1 ? !0 : $.ajax({
-					url: "../basedata/contact/getNextNo?action=getNextNo&type=10",
+					url: "../basedata/contact/getNextNo?action=getNextNo&type=-10",
 					type: "post",
 					data: "skey=" + a.value,
 					dataType: "json",
@@ -89,7 +89,7 @@ function initValidator() {
 		},
 		valid: function(a) {
 			var b = $.trim($("#name").val());
-			Public.ajaxPost("../basedata/contact/checkName?type=10&action=checkName", {
+			Public.ajaxPost("../basedata/contact/checkName?type=-10&action=checkName", {
 				name: b,
 				id: cRowId
 			}, function(a) {
@@ -108,7 +108,7 @@ function postData() {
 	var a = "add" == oper ? "新增供应商" : "修改供应商",
 		b = getData(),
 		c = b.firstLink || {};
-	delete b.firstLink, Public.ajaxPost("../basedata/contact/" + ("add" == oper ? "add" : "update")+"?type=10", b, function(d) {
+	delete b.firstLink, Public.ajaxPost("../basedata/contact/" + ("add" == oper ? "add" : "update")+"?type=-10", b, function(d) {
 		if (200 == d.status) {
 			if (parent.parent.Public.tips({
 				content: a + "成功！"

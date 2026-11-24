@@ -846,7 +846,7 @@ define(["jquery", "plugins", "grid", "dialog", "datepicker"], function(require, 
 					};
 					return usingData;
 				} else {
-					return '../basedata/contact?action=list$simple=1';
+					return '../basedata/contact?action=list&simple=1&type=10';
 				}
 			}
 		}, opts);
@@ -1033,7 +1033,7 @@ define(["jquery", "plugins", "grid", "dialog", "datepicker"], function(require, 
 					};
 					return usingData;
 				} else {
-					return '../basedata/contact?action=listt&simple=1&type=10';
+					return '../basedata/contact?action=list&simple=1&type=-10';
 				}
 			}
 		}, opts);
@@ -1099,7 +1099,7 @@ define(["jquery", "plugins", "grid", "dialog", "datepicker"], function(require, 
 				data: {oper: 'add', callback: function(data, oper, dialogWin){
 					//parent.getCustomer();
 					//_self.customerCombo.selectByValue(data.id, false);
-					supplierCombo.loadData('../basedata/contact?type=10&action=list', ['id', data.id]);
+					supplierCombo.loadData('../basedata/contact?type=-10&action=list', ['id', data.id]);
 					dialogWin && dialogWin.api.close();
 				}},
 				width : 640,
@@ -2277,9 +2277,9 @@ define(["jquery", "plugins", "grid", "dialog", "datepicker"], function(require, 
 				var lable = $('#customer').prev().text().slice(0, -1);
 				var title = '选择' + lable;
 				if(lable === '供应商' || lable === '购货单位') {
-					var content = 'url:../settings/select_customer?type=10';
+					var content = 'url:../settings/select_customer?type=-10';
 				} else {
-					var content = 'url:../settings/select_customer';
+					var content = 'url:../settings/select_customer?type=10';
 				}
 				_self.customerDialog = $.dialog({
 					width: 775,
@@ -3697,29 +3697,29 @@ define(["jquery", "plugins", "grid", "dialog", "datepicker"], function(require, 
 		if(!params.id)return;
 		var urls = {
 			//SALE
-			'150601' : {tabid : 'sales-sales',text : '销货单',right:'SA_QUERY', url : '/sales/sales.jsp?id='},
+			'150601' : {tabid : 'sales-sales',text : '销货单',right:'SA_QUERY', url : '/scm/invSa?action=editSale&id='},
 			//SALEBACK
-			'150602' : {tabid : 'sales-salesBack',text : '销货退货单',right:'SA_QUERY', url : '/sales/sales.jsp?transType=150602&id='},
+			'150602' : {tabid : 'sales-salesBack',text : '销货退货单',right:'SA_QUERY', url : '/scm/invSa?action=editSale&id='},
 			//PUR
-			'150501' : {tabid : 'purchase-purchase',text : '购货单',right:'PU_QUERY',url : '/purchase/purchase.jsp?id='},
+			'150501' : {tabid : 'purchase-purchase',text : '购货单',right:'PU_QUERY',url : '/scm/invPu?action=editPur&id='},
 			//PUR
-			'150502' : {tabid : 'purchase-purchaseBack',text : '购货退货单',right:'PU_QUERY',url : '/purchase/purchase.jsp?transType=150502&id='},
+			'150502' : {tabid : 'purchase-purchaseBack',text : '购货退货单',right:'PU_QUERY',url : '/scm/invPu?action=editPur&id='},
 			//TRANSFER
-			'103091' : {tabid : 'storage-transfers',text : '调拨单',right:'TF_QUERY',url : '/storage/transfers.jsp?id='},
+			'103091' : {tabid : 'storage-transfers',text : '调拨单',right:'TF_QUERY',url : '/scm/invTf?action=editTf&id='},
 			//OO
-			'150806' : {tabid : 'storage-otherOutbound',text : '其它出库 ',right:'OO_QUERY',url : '/storage/other-outbound.jsp?id='},
+			'150806' : {tabid : 'storage-otherOutbound',text : '其它出库 ',right:'OO_QUERY',url : '/scm/invOi?action=editOi&type=out&id='},
 			//OI
-			'150706' : {tabid : 'storage-otherWarehouse',text : '其它入库 ',right:'IO_QUERY',url : '/storage/other-warehouse.jsp?id='},
+			'150706' : {tabid : 'storage-otherWarehouse',text : '其它入库 ',right:'IO_QUERY',url : '/scm/invOi?action=editOi&type=in&id='},
 			//OO
-			'150801' : {tabid : 'storage-otherOutbound',text : '盘亏',right:'OO_QUERY',url : '/storage/other-outbound.jsp?id='},
+			'150801' : {tabid : 'storage-otherOutbound',text : '盘亏',right:'OO_QUERY',url : '/scm/invOi?action=editOi&type=out&id='},
 			//OI
-			'150701' : {tabid : 'storage-otherWarehouse',text : '盘盈',right:'IO_QUERY',url : '/storage/other-warehouse.jsp?id='},
+			'150701' : {tabid : 'storage-otherWarehouse',text : '盘盈',right:'IO_QUERY',url : '/scm/invOi?action=editOi&type=in&id='},
 			//CADJ
-			'150807' : {tabid : 'storage-adjustment',text : '成本调整',right:'CADJ_QUERY',url : '/storage/adjustment.jsp?id='},
+			'150807' : {tabid : 'storage-adjustment',text : '成本调整',right:'CADJ_QUERY',url : '/scm/invOi?action=editOi&type=cbtz&id='},
 			//PAYMENT
-			'153101' : {tabid : 'money-payment',text : '付款单',right:'PAYMENT_QUERY',url : '/money/payment.jsp?id='},
+			'153101' : {tabid : 'money-payment',text : '付款单',right:'PAYMENT_QUERY',url : '/scm/payment?action=editPay&id='},
 			//RECEIPT
-			'153001' : {tabid : 'money-receipt',text : '收款单',right:'RECEIPT_QUERY',url : '/money/receipt.jsp?id='},
+			'153001' : {tabid : 'money-receipt',text : '收款单',right:'RECEIPT_QUERY',url : '/scm/receipt?action=editReceipt&id='},
 			//PAYMENT
 			'153301' : {tabid : 'storage-assemble',text : '组装单',right:'ZZD_QUERY',url : '/storage/assemble.jsp?id='},
 			//RECEIPT

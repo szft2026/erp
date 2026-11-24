@@ -294,7 +294,7 @@ $(function() {
 				if (a && 0 != a.length) {
 					var c = $("#grid").jqGrid("getGridParam", "selarrrow"),
 						d = c.join();
-					Public.ajaxPost("../basedata/contact.do?action=disable", {
+					Public.ajaxPost("../basedata/contact/disable?action=disable", {
 						contactIds: d,
 						disable: Number(b)
 					}, function(c) {

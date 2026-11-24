@@ -41,7 +41,7 @@ $(function() {
 					tabid: "storage-adjustment",
 					text: "成本调整",
 					right: "CADJ_QUERY",
-					url: "../storage/adjustment.jsp?id="
+					url: "../scm/invOi?action=editOi&type=cbtz&id="
 				},
 				PAYMENT: {
 					tabid: "money-payment",
@@ -134,8 +134,8 @@ $(function() {
 						else {
 							var a = $("#customer").prev().text().slice(0, -1),
 								c = "选择" + a;
-							if ("供应商" === a || "购货单位" === a) var d = "url:../settings/select_customer?type=10";
-							else var d = "url:../settings/select_customer";
+							if ("供应商" === a || "购货单位" === a) var d = "url:../settings/select_customer?type=-10";
+							else var d = "url:../settings/select_customer?type=10";
 							b.customerDialog = $.dialog({
 								width: 775,
 								height: 510,

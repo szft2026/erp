@@ -869,8 +869,9 @@ class Report extends CI_Controller {
 		$where = 'a.isDelete=0';
 		if ($supplier && $customer) {
 		} else {
-			$where .= $supplier ? ' and type=10' : '';
-			$where .= $customer ? ' and type=-10' : '';
+			// type: 10=客户, -10=供应商（原来两个分支写反了）
+			$where .= $supplier ? ' and type=-10' : '';
+			$where .= $customer ? ' and type=10' : '';
 		}
 		$where .= $matchCon ? ' and (name like "%'.$matchCon.'%" or number like "%'.$matchCon.'%")' : '';
 		$where .= $this->common_model->get_contact_purview(); 
@@ -911,8 +912,9 @@ class Report extends CI_Controller {
 		$where = 'a.isDelete=0';
 		if ($supplier && $customer) {
 		} else {
-			$where .= $supplier ? ' and type=10' : '';
-			$where .= $customer ? ' and type=-10' : '';
+			// type: 10=客户, -10=供应商（原来两个分支写反了）
+			$where .= $supplier ? ' and type=-10' : '';
+			$where .= $customer ? ' and type=10' : '';
 		}
 		$where .= $matchCon ? ' and (name like "%'.$matchCon.'%" or number like "%'.$matchCon.'%")' : '';
 		$where .= $this->common_model->get_contact_purview(); 
@@ -1460,7 +1462,7 @@ class Report extends CI_Controller {
 		$beginDate   = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$endDate     = str_enhtml($this->input->get_post('endDate',TRUE));
 		$where1 = ' and (billType="PUR" or billType="PAYMENT")';
-		$where2 = 'a.isDelete=0 and a.type=10';
+		$where2 = 'a.isDelete=0 and a.type=-10';  // 供应商
 		$where2 .= $accountNo ? ' and a.number="'.$accountNo.'"' : '';
 		$list1 = $this->data_model->get_contact('and billDate<"'.$beginDate.'" '.$where1 ,$where2.' order by a.id');
 		$where3 = 'a.isDelete=0 and (a.billType="PUR" or a.billType="PAYMENT")';
@@ -1562,7 +1564,7 @@ class Report extends CI_Controller {
 		$data['beginDate']  = $beginDate   = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$data['endDate']    = $endDate     = str_enhtml($this->input->get_post('endDate',TRUE));
 		$where1 = ' and (billType="PUR" or billType="PAYMENT")';
-		$where2 = 'a.isDelete=0 and a.type=10';
+		$where2 = 'a.isDelete=0 and a.type=-10';  // 供应商
 		$where2 .= $accountNo ? ' and a.number="'.$accountNo.'"' : '';
 		$data['list1'] = $this->data_model->get_contact('and billDate<"'.$beginDate.'" '.$where1 ,$where2.' order by a.id');
 		$where3 = 'a.isDelete=0 and (a.billType="PUR" or a.billType="PAYMENT")';
@@ -1599,7 +1601,7 @@ class Report extends CI_Controller {
 		$beginDate   = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$endDate     = str_enhtml($this->input->get_post('endDate',TRUE));
 		$where1 = 'and (billType="SALE" or billType="RECEIPT") and billDate<"'.$beginDate.'"';
-		$where2 = 'a.isDelete=0 and (a.type=-10)';
+		$where2 = 'a.isDelete=0 and (a.type=10)';  // 客户
 		$where2 .= $accountNo ? ' and a.number="'.$accountNo.'"' : '';
 		$list1 = $this->data_model->get_contact($where1 ,$where2.' order by a.id');
 		$where3 = 'a.isDelete=0  and (a.billType="SALE" or a.billType="RECEIPT")';
@@ -1698,7 +1700,7 @@ class Report extends CI_Controller {
 		$data['beginDate']  = $beginDate   = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$data['endDate']    = $endDate     = str_enhtml($this->input->get_post('endDate',TRUE));
 		$where1 = 'and (billType="SALE" or billType="RECEIPT") and billDate<"'.$beginDate.'"';
-		$where2 = 'a.isDelete=0 and (a.type=-10)';
+		$where2 = 'a.isDelete=0 and (a.type=10)';  // 客户
 		$where2 .= $accountNo ? ' and a.number="'.$accountNo.'"' : '';
 		$data['list1'] = $this->data_model->get_contact($where1 ,$where2.' order by a.id');
 		$where3 = 'a.isDelete=0  and (a.billType="SALE" or a.billType="RECEIPT")';

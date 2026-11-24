@@ -193,7 +193,7 @@ function getStorage() {
 //缓存客户信息
 function getCustomer() {
 	if(SYSTEM.isAdmin || SYSTEM.rights.BU_QUERY) {
-		Public.ajaxGet('<?php echo site_url()?>/basedata/contact?action=list&simple=1&isDelete=2', { rows: 5000 }, function(data){
+		Public.ajaxGet('<?php echo site_url()?>/basedata/contact?action=list&simple=1&type=10&isDelete=2', { rows: 5000 }, function(data){
 			if(data.status === 200) {
 				SYSTEM.customerInfo = data.data.rows;
 			} else if (data.status === 250){
@@ -209,7 +209,7 @@ function getCustomer() {
 //缓存供应商信息
 function getSupplier() {
 	if(SYSTEM.isAdmin || SYSTEM.rights.PUR_QUERY) {
-		Public.ajaxGet('<?php echo site_url()?>/basedata/contact?action=list&simple=1&type=10&isDelete=2', { rows: 5000 }, function(data){
+		Public.ajaxGet('<?php echo site_url()?>/basedata/contact?action=list&simple=1&type=-10&isDelete=2', { rows: 5000 }, function(data){
 			if(data.status === 200) {
 				SYSTEM.supplierInfo = data.data.rows;
 			} else if (data.status === 250){

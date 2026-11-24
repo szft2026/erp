@@ -49,7 +49,6 @@ $(document).keydown(function(event) {
                   <p>导入模板的格式不能修改，录入方法请参考演示模板。</p>
               </div>
               <p><a href="/index.php/basedata/import?action=downloadtemplate3" class="link">下载导入模版</a></p>
-              <p><a href="/basedata/import?action=downloadTemplate" class="link">下载演示模版</a></p>
               <p><a href="#" id="resultInfo" class="link">查看导入信息</a></p>
               <div class="step-btns">
                   <a href="#" class="ui-btn ui-btn-sp" rel="step2">下一步</a>

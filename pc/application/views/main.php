@@ -108,10 +108,10 @@ $("#username").text(parent.SYSTEM.realName);
             <li><a href="<?=site_url('report/pu_detail_new')?>" rel="pageTab" tabid="report-puDetail" tabTxt="采购明细表" data-right="PUREOORTDETAIL_QUERY" parentOpen="true">采购明细表</a></li>
         	<li style="border-bottom:none; line-height: 42px; "><a tabid="storage-transfersList" data-right="TF_QUERY" tabTxt="调拨记录" parentOpen="true" rel="pageTab" href="<?=site_url('scm/invTf?action=initTfList')?>">调拨记录</a></li>
         	<!--
-        	<li><a tabid="storage-otherWarehouseList" data-right="IO_QUERY" tabTxt="其他入库记录" parentOpen="true" rel="pageTab" href="/scm/invOi.do?action=initOiList&type=in">其他入库记录</a></li>
-        	<li><a tabid="storage-otherOutboundList" data-right="OO_QUERY" tabTxt="其他出库记录" parentOpen="true" rel="pageTab" href="/scm/invOi.do?action=initOiList&type=out">其他出库记录</a></li>
-        	<li><a tabid="report-initialBalance" data-right="InvBalanceReport_QUERY" tabTxt="商品库存余额" parentOpen="true" rel="pageTab" href="/report/invBalance.do?action=detail">商品库存余额</a></li>
-        	<li><a tabid="report-contactDebt" data-right="ContactDebtReport_QUERY" tabTxt="往来单位欠款表" parentOpen="true" rel="pageTab" href="/report/contactDebt.do?action=detail">往来单位欠款</a></li>
+        	<li><a tabid="storage-otherWarehouseList" data-right="IO_QUERY" tabTxt="其他入库记录" parentOpen="true" rel="pageTab" href="<?=site_url('scm/invOi?action=initOiList&type=in')?>">其他入库记录</a></li>
+        	<li><a tabid="storage-otherOutboundList" data-right="OO_QUERY" tabTxt="其他出库记录" parentOpen="true" rel="pageTab" href="<?=site_url('scm/invOi?action=initOiList&type=out')?>">其他出库记录</a></li>
+        	<li><a tabid="report-initialBalance" data-right="InvBalanceReport_QUERY" tabTxt="商品库存余额" parentOpen="true" rel="pageTab" href="<?=site_url('report/invBalance')?>">商品库存余额</a></li>
+        	<li><a tabid="report-contactDebt" data-right="ContactDebtReport_QUERY" tabTxt="往来单位欠款表" parentOpen="true" rel="pageTab" href="<?=site_url('report/contact_debt_new?action=detail')?>">往来单位欠款</a></li>
         	-->
         </ul>
       </div>

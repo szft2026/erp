@@ -57,7 +57,7 @@ var urlParam = Public.urlParam(),
 		},
 		loadGrid: function() {
 			var a = "../basedata/contact?action=list";
-			"10" === urlParam.type && (a += "&type=10");
+			(urlParam.type == "10" || urlParam.type == "-10") && (a += "&type=" + urlParam.type);
 			var b = ($(window).height() - $(".grid-wrap").offset().top - 84, [{
 				name: "customerType",
 				label: "类别",

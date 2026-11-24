@@ -42,7 +42,7 @@ $(function() {
 						tabid: "storage-adjustment",
 						text: "成本调整",
 						right: "CADJ_QUERY",
-						url: "../storage/adjustment.jsp?id="
+						url: "../scm/invOi?action=editOi&type=cbtz&id="
 					},
 					PAYMENT: {
 						tabid: "money-payment",

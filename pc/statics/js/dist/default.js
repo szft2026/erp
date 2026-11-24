@@ -119,7 +119,7 @@ var dataReflush, list = {
 	},
 	onlineSalesList: {
 		name: "销货记录",
-		href: "/scm/invSa.do?action=initSaleList",
+		href: "/scm/invSa?action=initSaleList",
 		dataRight: "SA_QUERY",
 		target: "vip-onlineStore"
 	},

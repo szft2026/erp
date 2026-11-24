@@ -55,7 +55,7 @@ function initValidator() {
 			},
 			myRemote: function(a, b, c) {
 				return c.old.value === a.value || $(a).data("tip") === !1 && a.value.length > 1 ? !0 : $.ajax({
-					url: "../basedata/contact/getNextNo?action=getNextNo&type=-10",
+					url: "../basedata/contact/getNextNo?action=getNextNo&type=10",
 					type: "post",
 					data: "skey=" + a.value,
 					dataType: "json",
@@ -108,7 +108,7 @@ function postCustomerData() {
 	var a = "add" == oper ? "新增客户" : "修改客户",
 		b = getCustomerData(),
 		c = b.firstLink || {};
-	delete b.firstLink, Public.ajaxPost("../basedata/contact/" + ("add" == oper ? "add" : "update"), b, function(d) {
+	delete b.firstLink, Public.ajaxPost("../basedata/contact/" + ("add" == oper ? "add" : "update")+"?type=10", b, function(d) {
 		if (200 == d.status) {
 			if (parent.parent.Public.tips({
 				content: a + "成功！"

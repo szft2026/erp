@@ -429,7 +429,7 @@ var curRow, curCol, curArrears, loading, urlParam = Public.urlParam(),
 				a.preventDefault(), Business.verifyRight("CADJ_ADD") && parent.tab.overrideSelectedTabItem({
 					tabid: "storage-adjustment",
 					text: "成本调整单",
-					url: "/scm/invOi.do?action=initOi&type=cbtz"
+					url: "/scm/invOi?action=initOi&type=cbtz"
 				})
 			}), $(".wrapper").on("click", "#print", function(a) {
 				return Business.verifyRight("CADJ_PRINT") ? void 0 : void a.preventDefault()

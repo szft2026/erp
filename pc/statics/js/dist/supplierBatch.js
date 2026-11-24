@@ -16,7 +16,7 @@ var api = frameElement.api,
 		loadGrid: function() {
 			$(window).height() - $(".grid-wrap").offset().top - 84;
 			$grid.jqGrid({
-				url: "../basedata/contact?type=10&action=list",
+				url: "../basedata/contact?type=-10&action=list",
 				postData: queryConditions,
 				datatype: "json",
 				width: 528,
@@ -88,7 +88,7 @@ var api = frameElement.api,
 		},
 		reloadData: function(a) {
 			addList = {}, $grid.jqGrid("setGridParam", {
-				url: "../basedata/contact?type=10&action=list",
+				url: "../basedata/contact?type=-10&action=list",
 				datatype: "json",
 				postData: a
 			}).trigger("reloadGrid")
