@@ -676,7 +676,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 								width: 775,
 								height: 510,
 								title: "选择商品",
-								content: "url:/settings/goods-batch.jsp",
+								content: "url:/settings/goods_batch",
 								data: {
 									skuMult: SYSTEM.enableAssistingProp,
 									skey: w.skey,

@@ -165,7 +165,7 @@ $(document).keydown(function(event) {
 			width: 460,
 			height: 300,
 			title: '导入信息',
-			content: 'url:/resultInfo.jsp',
+			content: 'url:/basedata/resultInfo',
 			data: {
 				callback: function(row){
 					_pop.close();
@@ -181,7 +181,7 @@ $(document).keydown(function(event) {
 			width: 460,
 			height: 300,
 			title: '导入信息',
-			content: 'url:/resultInfo.jsp',
+			content: 'url:/basedata/resultInfo',
 			data: {
 				callback: function(row){
 				}

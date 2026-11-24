@@ -17,31 +17,31 @@ $(function() {
 					tabid: "sales-sales",
 					text: "销货单",
 					right: "SA_QUERY",
-					url: "/sales/sales.jsp?id="
+					url: "/scm/invSa?action=editSale&id="
 				},
 				PUR: {
 					tabid: "purchase-purchase",
 					text: "购货单",
 					right: "PU_QUERY",
-					url: "/purchase/purchase.jsp?id="
+					url: "/scm/invPu?action=editPur&id="
 				},
 				TRANSFER: {
 					tabid: "storage-transfers",
 					text: "调拨单",
 					right: "TF_QUERY",
-					url: "/storage/transfers.jsp?id="
+					url: "/scm/invTf?action=editTf&id="
 				},
 				OO: {
 					tabid: "storage-otherOutbound",
 					text: "其它出库 ",
 					right: "OO_QUERY",
-					url: "/storage/other-outbound.jsp?id="
+					url: "/scm/invOi?action=editOi&type=out&id="
 				},
 				OI: {
 					tabid: "storage-otherWarehouse",
 					text: "其它入库 ",
 					right: "IO_QUERY",
-					url: "/storage/other-warehouse.jsp?id="
+					url: "/scm/invOi?action=editOi&type=in&id="
 				},
 				CADJ: {
 					tabid: "storage-adjustment",
@@ -53,13 +53,13 @@ $(function() {
 					tabid: "money-payment",
 					text: "付款单",
 					right: "PAYMENT_QUERY",
-					url: "/money/payment.jsp?id="
+					url: "/scm/payment?action=editPay&id="
 				},
 				RECEIPT: {
 					tabid: "money-receipt",
 					text: "收款单",
 					right: "RECEIPT_QUERY",
-					url: "/money/receipt.jsp?id="
+					url: "/scm/receipt?action=editReceipt&id="
 				},
 				VERIFICA: {
 					tabid: "money-verifica",

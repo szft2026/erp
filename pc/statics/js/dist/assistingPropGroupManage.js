@@ -86,7 +86,7 @@ $(function() {
 						f = "新增" + c.opts.noDataText.replace("请先添加", ""),
 						g = parent.$.dialog({
 							title: f,
-							content: "url:propManage.jsp",
+							content: "url:/settings/propmanage",
 							data: {
 								oper: "add",
 								typeNumber: d,

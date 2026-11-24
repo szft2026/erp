@@ -724,7 +724,7 @@ function initEvent() {
 			c = "新增" + $("#jqgh_gridSku_" + b).text(),
 			d = parent.$.dialog({
 				title: c,
-				content: "url:propManage.jsp",
+				content: "url:/settings/propmanage",
 				data: {
 					oper: "add",
 					typeNumber: b,

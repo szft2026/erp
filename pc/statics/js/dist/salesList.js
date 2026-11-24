@@ -231,7 +231,7 @@ var THISPAGE = {
 				width: 560,
 				height: 300,
 				title: "批量导入",
-				content: "url:/sales/import.jsp?type=sa&transType=" + b,
+				content: "url:/import?type=sa&transType=" + b,
 				lock: !0
 			})
 		}), $(".wrapper").on("click", "#export", function(a) {
