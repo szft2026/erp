@@ -69,7 +69,8 @@ class Right extends CI_Controller {
 				 'username' => $data['userNumber'],
 				 'userpwd'  => md5($data['password']),
 				 'name'     => $data['userName'],
-				 'mobile'   => $data['userMobile']
+				 'mobile'   => $data['userMobile'],
+				 'status'   => 1, // 不写这一项时库里默认 0，新用户建出来就是「锁定」状态，登录报账号被锁定
 			);
 		    $sql = $this->mysql_model->insert('admin',$info);
 			if ($sql) {
