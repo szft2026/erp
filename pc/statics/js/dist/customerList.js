@@ -100,7 +100,7 @@ $(function() {
 				formatter: d
 			}];
 		h.gridReg("grid", c), c = h.conf.grids.grid.colModel, $("#grid").jqGrid({
-			url: "../basedata/contact?action=list&isDelete=2",
+			url: "../basedata/contact?action=list&isDelete=2&type=10",
 			datatype: "json",
 			autowidth: !0,
 			height: a.h,
@@ -275,7 +275,7 @@ $(function() {
 			},
 			del: function(a) {
 				$.dialog.confirm("删除的客户将不能恢复，请确认是否删除？", function() {
-					Public.ajaxPost("../basedata/contact/delete?action=delete", {
+					Public.ajaxPost("../basedata/contact/delete?type=10&action=delete", {
 						id: a
 					}, function(b) {
 						if (b && 200 == b.status) {

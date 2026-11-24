@@ -84,7 +84,7 @@ $(function() {
 				formatter: g.statusFmatter
 			}];
 		h.gridReg("grid", d), d = h.conf.grids.grid.colModel, $("#grid").jqGrid({
-			url: "../basedata/contact?type=10&action=list&isDelete=2",
+			url: "../basedata/contact?type=-10&action=list&isDelete=2",
 			datatype: "json",
 			autowidth: !0,
 			height: a.h,
@@ -257,7 +257,7 @@ $(function() {
 			},
 			del: function(a) {
 				$.dialog.confirm("删除的供应商将不能恢复，请确认是否删除？", function() {
-					Public.ajaxPost("../basedata/contact/delete?type=10&action=delete", {
+					Public.ajaxPost("../basedata/contact/delete?type=-10&action=delete", {
 						id: a
 					}, function(b) {
 						if (b && 200 == b.status) {
