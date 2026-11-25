@@ -1,6 +1,6 @@
 # H5ERP 进销存（PC 端）
 
-飞腾公司进销存管理后台。原 **PHP 5.6 + CodeIgniter 2.2.5**，已升级到 **PHP 8.2 + Apache**，并做成 Docker 镜像，本地和云端都能跑。
+进销存管理后台。原 **PHP 5.6 + CodeIgniter 2.2.5**，已升级到 **PHP 8.2 + Apache**，并做成 Docker 镜像，本地和云端都能跑。
 
 **数据库不在镜像里**：使用外部 MySQL（自备），容器只跑应用。
 
@@ -41,6 +41,17 @@ docker compose -f docker-compose.local.yml up -d --build
 
 首次启动会自动建库、导入 `erp.sql`（25 张表 + 管理员 + 菜单）。
 
+#### 数据库参数
+
+方式 1 的 MySQL 就在 compose 里，**不用填 `DB_HOST`**（应用用服务名 `db` 连接）。默认 root 密码 `root123`、库名 `erp`；想改就在 `erp/` 下建 `.env`：
+
+```env
+DB_PASSWORD=换成你的强密码
+DB_DATABASE=erp
+```
+
+只在 **`db-data` 卷第一次创建时**生效，已初始化过再改不会改变 MySQL 里的密码（见「六、升级与备份」）。
+
 ### 方式 2：只跑应用，接本机或远程 MySQL
 
 ```bash
@@ -60,6 +71,71 @@ docker run -d --name h5erp -p 8080:8080 \
 - `172.17.0.1` 是 docker0 网桥地址，用于访问**宿主机上的 MySQL**；MySQL 在别的机器就填那台的 IP
 - macOS / Windows 用 `host.docker.internal`
 - 上传文件、数据库备份都在 `h5erp-data` 卷（容器内 `/data`）
+
+#### 数据库参数怎么填
+
+方式 2 连的是**你自己的 MySQL**，必须显式给出连接信息。最少 5 个：
+
+| 变量 | 示例 | 说明 |
+|---|---|---|
+| `DB_HOST` | `10.0.0.5` / `mysql.example.com` | 数据库地址；在宿主机上就写 `172.17.0.1`（macOS/Windows 用 `host.docker.internal`） |
+| `DB_PORT` | `3306` | 非默认端口要改 |
+| `DB_DATABASE` | `erp` | 库要提前建好 |
+| `DB_USERNAME` | `erp` | 账号要能从容器所在机器连进来 |
+| `DB_PASSWORD` | `你的密码` | 有 `@ : / #` 也没关系，走单变量不需要转义 |
+
+再加一个开关：
+
+| 变量 | 取值 | 说明 |
+|---|---|---|
+| `AUTO_INIT_SCHEMA` | `1` | 空库：首次启动自动导入 `erp.sql` |
+| | `0` | 库里有数据：完全不碰现有表（**生产建议 0**） |
+
+两种给法，任选一种。
+
+**A. 直接写在 `docker run` 上**
+
+```bash
+docker run -d --name h5erp -p 8080:8080 \
+  -e DB_HOST=10.0.0.5 \
+  -e DB_PORT=3306 \
+  -e DB_DATABASE=erp \
+  -e DB_USERNAME=erp \
+  -e DB_PASSWORD='你的密码' \
+  -e AUTO_INIT_SCHEMA=0 \
+  -v h5erp-data:/data \
+  h5erp
+```
+
+**B. 用 `.env` 文件（推荐，改配置不用改命令）**
+
+在项目根目录建 `.env`：
+
+```env
+DB_HOST=10.0.0.5
+DB_PORT=3306
+DB_DATABASE=erp
+DB_USERNAME=erp
+DB_PASSWORD=你的密码
+AUTO_INIT_SCHEMA=0
+```
+
+启动时带上：
+
+```bash
+docker run -d --name h5erp -p 8080:8080 \
+  --env-file .env \
+  -v h5erp-data:/data \
+  h5erp
+```
+
+改完 `.env` 要让配置生效，需要重建容器（镜像不用重新 build）：
+
+```bash
+docker rm -f h5erp && docker run -d --name h5erp -p 8080:8080 --env-file .env -v h5erp-data:/data h5erp
+```
+
+> 数据库账号需要 `CREATE / ALTER / INSERT / UPDATE / DELETE / INDEX` 权限（首次建表用），并且允许应用所在机器访问（安全组 / `user@'%'`）。
 
 ---
 
@@ -179,7 +255,85 @@ FLUSH PRIVILEGES;
 
 ---
 
-## 六、目录结构
+## 六、升级与备份
+
+### 升级到新版本
+
+**方式 1（compose，库在容器里）**
+
+```bash
+cd erp
+git pull
+docker compose -f docker-compose.local.yml up -d --build
+```
+
+**方式 2（自有 MySQL）**
+
+```bash
+cd erp
+git pull
+docker build -t h5erp .
+docker rm -f h5erp
+docker run -d --name h5erp -p 8080:8080 \
+  --env-file .env \
+  -v h5erp-data:/data \
+  h5erp
+```
+
+- 方式 2 的数据库在你自己那边，升级只换应用，**库不受影响**
+- 两种方式的上传文件和备份都在 `h5erp-data` 卷，重建容器不会丢
+- 回滚：`git checkout <上一个提交>`，再按对应方式重新构建/启动
+
+### 升级前先备份
+
+系统内：**设置 → 备份与恢复 → 备份**，文件落在 `/data/backup`，可以「下载」取回。
+
+命令行：
+
+```bash
+# 方式 1：库在 compose 里
+docker exec h5erp-db sh -c 'exec mysqldump -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' \
+  > backup_$(date +%F_%H%M).sql
+
+# 方式 2：库是你自己的
+mysqldump -h 10.0.0.5 -P 3306 -u erp -p erp > backup_$(date +%F_%H%M).sql
+```
+
+### 表结构会跟着升级吗
+
+**不会自动改。** `erp.sql` 只在**空库首次初始化**时导入；升级只替换代码，不动已有表结构。
+
+如果新版本带了字段变更，按发布说明手工执行 `ALTER TABLE`（或导出数据 → 重建库 → 导回）。升级前先看发布说明里有没有「数据库变更」一节。
+
+### 修改数据库密码
+
+**方式 1**：密码在 MySQL 容器里，改 `.env` 不会同步：
+
+```bash
+docker exec -it h5erp-db mysql -uroot -p
+# 输入当前密码后：
+ALTER USER 'root'@'%' IDENTIFIED BY '新密码';
+FLUSH PRIVILEGES;
+```
+
+然后把 `.env` 的 `DB_PASSWORD` 改成同一个值，再 `docker compose -f docker-compose.local.yml up -d`。
+
+**方式 2**：在**你自己的 MySQL** 上改密码，然后更新 `.env` 里的 `DB_PASSWORD`，重建容器：
+
+```bash
+docker rm -f h5erp && docker run -d --name h5erp -p 8080:8080 --env-file .env -v h5erp-data:/data h5erp
+```
+
+### 彻底重来（仅方式 1，会清空数据）
+
+```bash
+docker compose -f docker-compose.local.yml down -v   # -v 删除数据卷
+docker compose -f docker-compose.local.yml up -d --build
+```
+
+---
+
+## 七、目录结构
 
 ```
 erp/
@@ -196,7 +350,7 @@ erp/
 
 ---
 
-## 七、常见问题
+## 八、常见问题
 
 | 现象 | 原因 / 处理 |
 |---|---|
@@ -210,7 +364,7 @@ erp/
 
 ---
 
-## 八、相关文档
+## 九、相关文档
 
 - **[DEPLOY-blitz.md](DEPLOY-blitz.md)** — blitz.cloud 部署（GitHub 直连、环境变量、日志排查）
 - **[DOCKER.md](DOCKER.md)** — 本地 Docker 运行、compose 说明

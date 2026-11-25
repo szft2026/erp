@@ -7,3 +7,6 @@ Thumbs.db
 # TLS 证书不进仓库（保留说明文件）
 certs/*
 !certs/README.txt
+
+# 本地/部署环境变量（含密码）
+.env
