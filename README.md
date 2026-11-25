@@ -21,6 +21,8 @@ docker compose up -d --build
 
 首次启动会自动建库并导入 `erp.sql`（25 张表 + 管理员 + 菜单）。
 
+> 不用 Docker、想直接装在 Apache / Nginx 上？见 **[DEPLOY-php-server.md](DEPLOY-php-server.md)**。
+
 ---
 
 ## 配置（`.env`）
@@ -126,5 +128,6 @@ FLUSH PRIVILEGES;
 
 - [DOCKER.md](DOCKER.md) — Docker 运行细节
 - [DEPLOY-blitz.md](DEPLOY-blitz.md) — 部署到 blitz.cloud
+- [DEPLOY-php-server.md](DEPLOY-php-server.md) — 直接装在 Apache / Nginx 上（不用 Docker）
 - [docs/API-接口文档.md](docs/API-接口文档.md) — 43 个控制器 / 355 个接口
 - [docs/PHP8-升级说明.md](docs/PHP8-升级说明.md) — PHP 5.6 → 8.2 改动清单
