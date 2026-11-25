@@ -186,7 +186,7 @@ docker run -p 8080:8080 \
   h5erp
 
 # 或者一键起应用 + MySQL 8（仅本地调试用）
-docker compose -f docker-compose.local.yml up -d
+docker compose up -d
 ```
 
 访问 <http://localhost:8080>，admin / admin888。
@@ -195,7 +195,8 @@ docker compose -f docker-compose.local.yml up -d
 
 ## 9. 和 docker-compose 的区别
 
-`docker-compose.local.yml` 只是本地调试方便，里面带了一个 MySQL 容器。
-文件名故意不叫 `docker-compose.yml`：blitz 会读标准命名的 compose 文件、把里面的服务当应用的一部分，
-甚至会把它写的 `DB_HOST=db` 注进容器——那个主机在 blitz 上不存在。
-线上**只用 Dockerfile**：应用一个容器 + 你的 MySQL（或平台托管 MariaDB）。
+`docker-compose.yml` 是给自有服务器/本地用的（应用 + MySQL 两个容器）。
+
+blitz 会读标准命名的 compose 文件，可能把 `db` 服务列成「数据库，已忽略」——这是正常的，
+构建仍然只用根目录的 `Dockerfile`。如果向导让你选「哪个是应用」，选 `app` 那个即可。
+线上形态：应用一个容器 + 你的 MySQL（或平台托管 MariaDB）。

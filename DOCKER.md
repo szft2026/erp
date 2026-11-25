@@ -23,7 +23,7 @@ docker run -d --name h5erp -p 8080:8080 \
 ## 应用 + MySQL 8（仅本地调试）
 
 ```bash
-docker compose -f docker-compose.local.yml up -d --build
+docker compose up -d --build
 ```
 
 compose 会起一个 MySQL 8 并导入 `erp.sql`，应用连它。
@@ -32,7 +32,7 @@ compose 会起一个 MySQL 8 并导入 `erp.sql`，应用连它。
 改数据库密码：
 
 ```bash
-DB_PASSWORD=你的密码 docker compose -f docker-compose.local.yml up -d
+DB_PASSWORD=你的密码 docker compose up -d
 ```
 
 （只在 `db-data` 卷第一次创建时生效。）

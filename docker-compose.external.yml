@@ -1,0 +1,29 @@
+# 只跑应用，接你自己的 MySQL
+#
+#   cp .env.example .env      # 填 DB_HOST / DB_PORT / DB_DATABASE / DB_USERNAME / DB_PASSWORD
+#   docker compose -f docker-compose.external.yml up -d --build
+#
+# 库里有数据时把 AUTO_INIT_SCHEMA 设 0，空库设 1（首次启动自动导入 erp.sql）
+
+services:
+  app:
+    build: .
+    container_name: h5erp-app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_DATABASE: ${DB_DATABASE:-erp}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      AUTO_INIT_SCHEMA: ${AUTO_INIT_SCHEMA:-1}
+      DB_DEBUG: ${DB_DEBUG:-1}
+      WAIT_DB_SECONDS: ${WAIT_DB_SECONDS:-120}
+      TZ: Asia/Shanghai
+    volumes:
+      - app-data:/data
+    restart: unless-stopped
+
+volumes:
+  app-data:

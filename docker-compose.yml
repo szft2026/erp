@@ -1,13 +1,16 @@
-# H5ERP PC 端 —— 一键起环境（应用 + MySQL 8）
-# 用法：docker compose up -d
-# 访问：http://localhost:8080   账号 admin / admin888
+# 一键部署：应用 + MySQL 8
+#
+#   cp .env.example .env      # 改 DB_PASSWORD / DB_DATABASE
+#   docker compose up -d --build
+#
+# 访问 http://localhost:8080   admin / admin888
 
 services:
   db:
     image: mysql:8.0
     container_name: h5erp-db
     command:
-      # 老代码的 GROUP BY 写法不符合 ONLY_FULL_GROUP_BY，必须关掉
+      # 老代码的 GROUP BY 写法不符合 ONLY_FULL_GROUP_BY
       - --sql-mode=STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
       - --character-set-server=utf8
       - --collation-server=utf8_general_ci
@@ -16,7 +19,7 @@ services:
       MYSQL_DATABASE: ${DB_DATABASE:-erp}
     volumes:
       - db-data:/var/lib/mysql
-      # 首次启动自动导入表结构
+      # 首次启动导入表结构（25 张表 + admin + 菜单）
       - ./erp.sql:/docker-entrypoint-initdb.d/01-erp.sql:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${DB_PASSWORD:-root123}"]
@@ -32,12 +35,15 @@ services:
       - "8080:8080"
     environment:
       DB_HOST: db
+      DB_PORT: 3306
       DB_USERNAME: root
       DB_PASSWORD: ${DB_PASSWORD:-root123}
       DB_DATABASE: ${DB_DATABASE:-erp}
+      AUTO_INIT_SCHEMA: ${AUTO_INIT_SCHEMA:-1}
+      DB_DEBUG: ${DB_DEBUG:-1}
       TZ: Asia/Shanghai
     volumes:
-      # 上传的图片、附件
+      # 上传文件、数据库备份
       - app-data:/data
     depends_on:
       db:
