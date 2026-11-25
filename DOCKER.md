@@ -47,3 +47,33 @@ docker exec -it h5erp php -v  # PHP 版本
 - 启动日志停在 `[db-init]`：数据库地址/账号不对，或库不存在
 - 页面 500：设 `DB_DEBUG=1` 让 SQL 错误显示出来
 - 目录列表/源码泄露：`AllowOverride` 没生效（镜像已设为 All，自建环境要自己开）
+## 生产部署：应用 + Nginx（HTTPS）+ 外部 MySQL
+
+`docker-compose.prod.yml` 是一个可直接改域名就上的示例：
+
+```bash
+# 1) 准备环境变量
+cat > .env <<'ENV'
+DOMAIN=erp.example.com
+DB_HOST=10.0.0.5
+DB_PORT=3306
+DB_DATABASE=erp
+DB_USERNAME=erp
+DB_PASSWORD=你的密码
+AUTO_INIT_SCHEMA=0
+ENV
+
+# 2) 放证书（certbot 或你自己的）
+mkdir -p certs
+cp /etc/letsencrypt/live/erp.example.com/fullchain.pem certs/
+cp /etc/letsencrypt/live/erp.example.com/privkey.pem   certs/
+
+# 3) 起
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+- 应用仍监听容器内 8080，Nginx 负责 80→443 跳转和 TLS
+- `deploy/nginx.conf` 会带上 `X-Forwarded-Proto`，应用的 `base_url` 自动用 https，静态资源不会混合内容
+- 上传上限 64MB（Nginx `client_max_body_size` 与 php.ini 一致）
+- 数据在 `app-data` 卷（`/data`：上传文件 + 数据库备份）
+- 证书目录 `certs/` 已加入 `.gitignore`，只提交了 `certs/README.txt`

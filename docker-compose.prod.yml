@@ -1,0 +1,52 @@
+# 生产部署示例：应用 + Nginx（HTTPS）+ 外部 MySQL
+#
+# 用法：
+#   1) 复制 .env.example 为 .env，填 DB_*、DOMAIN、证书路径
+#   2) docker compose -f docker-compose.prod.yml up -d --build
+#
+# 说明：
+#   - 数据库不在这个 compose 里，用你现有的 MySQL（DB_HOST 填宿主机或远程地址）
+#   - 上传文件、数据库备份都在 app-data 卷（/data）
+#   - Nginx 只做 TLS 终止和反代，应用仍然监听容器内 8080
+
+services:
+  app:
+    build: .
+    container_name: h5erp-app
+    restart: unless-stopped
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_DATABASE: ${DB_DATABASE:-erp}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      # 空库自动导入 erp.sql；已有数据的老库设 0
+      AUTO_INIT_SCHEMA: ${AUTO_INIT_SCHEMA:-1}
+      DB_DEBUG: ${DB_DEBUG:-0}
+      WAIT_DB_SECONDS: ${WAIT_DB_SECONDS:-120}
+      TZ: Asia/Shanghai
+    volumes:
+      - app-data:/data
+    expose:
+      - "8080"
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: h5erp-nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/templates/default.conf.template:ro
+      # 证书目录：放 fullchain.pem / privkey.pem（certbot 或你自己的证书）
+      - ./certs:/etc/nginx/certs:ro
+      - nginx-logs:/var/log/nginx
+
+volumes:
+  app-data:
+  nginx-logs:
