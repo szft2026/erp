@@ -131,4 +131,5 @@ FLUSH PRIVILEGES;
 - [DEPLOY-php-server.md](DEPLOY-php-server.md) — 直接装在 Apache / Nginx 上（不用 Docker）
 - [docs/API-接口文档.md](docs/API-接口文档.md) — 43 个控制器 / 357 个接口，必填列按源码核对并实测
 - [docs/测试报告.md](docs/测试报告.md) — 全量接口冒烟、41 个写接口实测、库存/应收联动、缺陷清单
+- [docs/运维手册.md](docs/运维手册.md) — 备份/恢复、清理规范、常见故障、部署升级
 - [docs/PHP8-升级说明.md](docs/PHP8-升级说明.md) — PHP 5.6 → 8.2 改动清单
