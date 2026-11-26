@@ -337,6 +337,13 @@ class Import extends CI_Controller {
                 }
             }
         }
+	    // 表头不匹配时不能静默成功（否则用户以为导进去了）
+	    if ($itype === '') {
+	        $this->db->trans_rollback();
+	        $hist['result'] = '模板不匹配：请下载最新模板后重试';
+	        @file_put_contents($hist_file.'.json', json_encode($hist, JSON_UNESCAPED_UNICODE));
+	        str_alert(-1,'模板不匹配：请下载最新的导入模板后再试！');
+	    }
 	    if ($this->db->trans_status() === FALSE) {
 		    $this->db->trans_rollback();
 			str_alert(-1,'SQL错误回滚');
