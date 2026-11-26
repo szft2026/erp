@@ -204,7 +204,11 @@ class InvPu extends CI_Controller {
 			} else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('修改购货单 单据编号：'.$data['billNo']);
-				str_alert(200,'success',array('id'=>$data['id'])); 
+				// 采购订单转单：审核后把来源订单标记为已转单
+			if (intval($data['srcOrderId']) > 0) {
+			    $this->mysql_model->update('order',array('billStatus'=>2),array('id'=>intval($data['srcOrderId'])));
+			}
+			str_alert(200,'success',array('id'=>$data['id'])); 
 			}
 		}
 		str_alert(-1,'提交的数据不能为空'); 
@@ -484,6 +488,9 @@ class InvPu extends CI_Controller {
 			$sql = $this->mysql_model->update('invoice',array('checked'=>1,'checkName'=>$this->jxcsys['name']),'(id in('.$id.'))'); 
 			if ($sql) {
 			    //$this->mysql_model->update('invoice_info',array('checked'=>1),'(iid in('.$id.'))'); 
+				if (strlen($srcOrderId) > 0) {
+				    $this->mysql_model->update('order',array('billStatus'=>2),'(id in('.$srcOrderId.'))');
+				}
 				$this->common_model->logs('购货单编号：'.$billNo.'的单据已被审核！');
 				str_alert(200,'单据编号：'.$billNo.'的单据已被审核！');
 			} 
@@ -513,6 +520,9 @@ class InvPu extends CI_Controller {
 			$sql = $this->mysql_model->update('invoice',array('checked'=>0,'checkName'=>''),'(id in('.$id.'))'); 
 			if ($sql) {
 			    //$this->mysql_model->update('invoice_info',array('checked'=>0),'(iid in('.$id.'))'); 
+				if (strlen($srcOrderId) > 0) {
+				    $this->mysql_model->update('order',array('billStatus'=>0),'(id in('.$srcOrderId.'))');
+				}
 				$this->common_model->logs('购货单单号：'.$billNo.'的单据已被反审核！');
 				str_alert(200,'购货单编号：'.$billNo.'的单据已被反审核！'); 
 			} 

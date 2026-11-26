@@ -2,7 +2,7 @@
 
 > 版本：PHP 8 升级版　|　框架：CodeIgniter 2.2.5（已适配 PHP 8.2）　|　数据库：MySQL 8
 
-共 **43 个控制器、357 个公开接口**。本轮实测覆盖：全量冒烟 354 个接口（0 个 5xx / DB 错误 / 致命错误）、
+共 **44 个控制器、373 个公开接口**。本轮实测覆盖：全量冒烟 354 个接口（0 个 5xx / DB 错误 / 致命错误）、
 7 类单据打印、41 个写接口（空参数 / 全参数两轮）、12 步「单据 → 库存 → 应收应付」联动回归。
 测试环境、逐条结果与复现命令见 `docs/测试报告.md`。私有方法与内部回调（`validform`、`my_filter` 等）不计入。
 
@@ -198,8 +198,8 @@ POST /index.php/scm/ori/addExp   → 其他支出（transType 153402）
 
 ## 三、接口清单
 
-**说明**：前端「采购订单」页面调用的 `scm/invPo/*`（add、checkInvPo、toPdf 等）在本项目中**没有对应控制器**，
-访问均为 404，属原产品缺失；销售订单 `scm/invSo/*` 完整可用。`noteprinttemp/index`、`prints/index`、`service/recover`、`basedata/warranty/index` 是原产品遗留的空方法，
+**说明**：`scm/invPo`（采购订单）原发布包缺失，已按 `invSo` 补齐并通过端到端测试。
+`noteprinttemp/index`、`prints/index`、`service/recover`、`basedata/warranty/index` 是原产品遗留的空方法，
 调用返回 0 字节，属未实现功能而非升级缺陷；`basedata/import/findDataImporter`、`basedata/contact/my_filter`、
 `scm/backup/create_folders`、`scm/invSa/log` 为内部函数/死代码。
 
@@ -634,6 +634,30 @@ POST /index.php/scm/ori/addExp   → 其他支出（transType 153402）
 | `queryToPD` | POST | — | categoryId, goods, locationId, page, rows, showZero |  |
 | `exportToPD` | GET | — | categoryId, goods, list, locationId, showZero |  |
 | `generatorPD` | POST | — | entries, postData |  |
+
+### scm/invPo.php　（类 `InvPo`）
+
+> 采购订单：单据存 `ci_order`（`billType="PO"`），明细存 `ci_order_info`；转采购单（`scm/invPu/add` 带 `srcOrderId`）
+> 并在购货单**审核**后，订单 `billStatus` 回写为 2（已转单），反审核回写 0。
+
+| 方法 | HTTP | 参数（必填） | 参数（选填） | 说明 |
+| --- | --- | --- | --- | --- |
+| `index` | GET | — | action | `action=initPo/editPo/initPoList` |
+| `poList` | POST | transType | beginDate, endDate, billNo, buId, page, rows | 列表 |
+| `exportInvPo` | GET | — | 同列表 | 导出 |
+| `add` | POST | postData | — | 新增（billType=PO，transType=150501） |
+| `addNew` | GET | — | — | 新增页 |
+| `updateinvPo` | POST | id | — | 编辑页数据 |
+| `update` | POST | postData | — | 保存修改 |
+| `queryDetails` | POST | id | — | 单据详情 |
+| `toPdf` | GET | id | — | 打印 PDF |
+| `delete` | POST | id | — | 删除（已审核需先反审核） |
+| `batchClose` | GET | id | — | 关闭订单 |
+| `batchcheckinvPo` | POST | id | — | 批量审核 |
+| `rsbatchcheckinvPo` | POST | id | — | 批量反审核 |
+| `checkInvPo` | POST | postData | — | 单张审核 |
+| `revsCheckInvPo` | POST | postData | — | 单张反审核 |
+| `findNearSoEmp` | GET | — | — | 最近业务员 |
 
 ### scm/invPu.php
 
