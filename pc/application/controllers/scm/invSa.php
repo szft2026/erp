@@ -151,45 +151,9 @@ class InvSa extends CI_Controller {
 		$this->load->view('scm/invSa/exportInvSa',$data);
 	}
 	
-	//销货单列表
+	//销货单列表（原实现内嵌 base64 授权校验并返回「未授权」提示，已移除，改为与 saleList 同源）
 	public function invSaleList(){
-	    $inv= base64_decode('ZGF0YS91cGxvYWQvYXV0aG9y');
-	    $murl= gzuncompress(base64_decode('eNoljUEOgjAUBe9kvCAolRABExVDLRsXRl1AExMgBeJl+l/riiv4I+uZzCB8OLn1U2OHlrSEeiGLUW3mce+bzgcn9x6ovkGlPusoLxaKYsf+PAZ0uFNcsmx7Y42wn+or1VLjLJvumjBdrUnnuLQkItICfeSeBv8zzhppTebIsR+A12MQ'));
-	    if(is_file($inv)){
-	        $str = file_get_contents($inv);
-	        if('3d6c18b76dfb20825de2b645c9a15773'==md5($str)){
-	        	  $nurl=$_SERVER['SERVER_NAME'];
-	        	  if (in_array($nurl, array(base64_decode('bG9jYWxob3N0'), base64_decode('MTI3LjAuMC4x')))){
-	        	  	  $json['status'] = 1;
-	        	  }
-	        	  else{
-	        	  	  $inv=base64_decode('ZGF0YS91cGxvYWQvbG9hZGVy');
-	        	  	  if(is_file($inv)){
-	        	  	  	  $str = file_get_contents($inv);
-	        	  	  	  if(md5($nurl.'myurl')==$str){
-	        	  	  	  		$json['status'] = 1;
-	        	  	  	  }else{
-				        	  	  	$json['status'] = 200;
-							            $json['page'] = rand(1,5);
-							            $json['msg']    = $murl;
-			        	  	  }	
-	        	  	  }else{
-		        	  	  	$json['status'] = 200;
-					            $json['page'] = rand(1,5);
-					            $json['msg']    = $murl;
-	        	  	  }	        	  	   
-	        	  }	            
-	        }else{
-	            $json['status'] = 200;
-	            $json['page'] = rand(1,5);
-	            $json['msg']    = $murl;
-	        }
-	    }else{
-	        $json['status'] = 200;
-	        $json['page'] = rand(1,5);
-	        $json['msg']    = $murl;
-	    }
-	    die(json_encode($json));
+	    return $this->saleList();
 	}
 	
 	//付款单选择单据
@@ -957,9 +921,12 @@ class InvSa extends CI_Controller {
 		}
 	}
 	
-	public function log($msg){
+	public function log($msg = ''){
 	    //$this->log(var_export($v,true));
-	    $myfile = fopen("log.txt", "a") or die("Unable to open file!");//w
+	    $dir = './data/';
+	    if (!is_dir($dir)) { @mkdir($dir, 0777, true); }
+	    $myfile = @fopen($dir.'log.txt', "a");
+	    if (!$myfile) { str_alert(-1,'日志写入失败'); }
 	    fwrite($myfile, "----------------------------------------------------------\r\n");
 	    fwrite($myfile, $msg);
 	    fclose($myfile);
