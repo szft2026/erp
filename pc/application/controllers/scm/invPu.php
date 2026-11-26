@@ -398,7 +398,7 @@ class InvPu extends CI_Controller {
 	 
     public function delete1() {
 	    $this->common_model->checkpurview(4);
-	    $id   = intval($this->input->get('id',TRUE));
+	    $id   = intval($this->input->get_post('id',TRUE));
 		$data = $this->mysql_model->get_rows('invoice',array('id'=>$id,'billType'=>'PUR'));  
 		if (count($data)>0) {
 		    //$data['checked'] >0 && str_alert(-1,'已审核的不可删除'); 

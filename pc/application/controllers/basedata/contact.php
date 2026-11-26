@@ -179,7 +179,7 @@ class Contact extends CI_Controller {
 		$billType  = str_enhtml($this->input->post('billType',TRUE));
 		$transType = intval($this->input->post('transType',TRUE));
 		$where = '(isDelete=0)'; 
-		$where .= ($transType==150501||$transType==150502) ? ' and type=10' :' and type=-10';//mody by michen 20170820 修正购货退货单默认供应商不正确
+		$where .= ($transType==150501||$transType==150502) ? ' and type=-10' :' and type=10';//mody by michen 20170820 修正购货退货单默认供应商不正确
 		$where .= $this->common_model->get_contact_purview();
 	    $data = $this->mysql_model->get_rows('contact',$where); 
 	    //die(var_export($data,true));
@@ -313,6 +313,9 @@ class Contact extends CI_Controller {
 	//修改
 	public function update(){
 		$data = $this->validform($this->input->post(NULL,TRUE));
+		// 没传 id 时 $data['id'] 不存在，下面 "id !=" 会拼成空值，MySQL 直接 1064
+		$data['id'] = intval(isset($data['id']) ? $data['id'] : 0);
+		$data['id'] < 1 && str_alert(-1,'缺少要修改的记录 ID');
 		switch ($data['type']) {
 			case 10:
 				$this->common_model->checkpurview(60);
@@ -406,6 +409,8 @@ class Contact extends CI_Controller {
 		$data['difMoney']      = $data['amount'] - $data['periodMoney'];
 		$data['cCategoryName'] = $this->mysql_model->get_row('category',array('id'=>$data['cCategory']),'name');
 		$data['cCategory'] < 1 && str_alert(-1,'类别名称不能为空');
+		// 类别不存在时直接拒绝，否则会写进 NULL，超出 smallint 范围还会 1264
+		!$data['cCategoryName'] && str_alert(-1,'类别不存在');
 		return $data;
 	}  
 	

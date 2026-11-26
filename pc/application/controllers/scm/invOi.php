@@ -279,7 +279,7 @@ class InvOi extends CI_Controller {
 
     public function deletein() {
 	    $this->common_model->checkpurview(17);
-	    $id   = intval($this->input->get('id',TRUE));
+	    $id   = intval($this->input->get_post('id',TRUE));
 		$data = $this->mysql_model->get_rows('invoice',array('id'=>$id,'billType'=>'OI'));  
 		if (count($data)>0) {
 		    $this->db->trans_begin();
@@ -516,7 +516,7 @@ class InvOi extends CI_Controller {
 
     public function deleteOut() {
 	    $this->common_model->checkpurview(21);
-	    $id   = intval($this->input->get('id',TRUE));
+	    $id   = intval($this->input->get_post('id',TRUE));
 		$data = $this->mysql_model->get_rows('invoice',array('id'=>$id,'billType'=>'OO'));  
 		if (count($data)>0) {
 		    $this->db->trans_begin();
@@ -734,7 +734,7 @@ class InvOi extends CI_Controller {
 
     public function deleteCbtz() {
 	    $this->common_model->checkpurview(21);
-	    $id   = intval($this->input->get('id',TRUE));
+	    $id   = intval($this->input->get_post('id',TRUE));
 		$data = $this->mysql_model->get_rows('invoice',array('id'=>$id,'transType'=>150807));  
 		if (count($data)>0) {
 		    $this->db->trans_begin();

@@ -600,7 +600,8 @@ class InvSa extends CI_Controller {
 	//删除 
     public function delete() {
 	    $this->common_model->checkpurview(9);
-	    $id   = intval($this->input->get('id',TRUE));
+	    // 与 invPu/invOi 一致：GET/POST 都接受
+	    $id   = intval($this->input->get_post('id',TRUE));
 		$data = $this->mysql_model->get_rows('invoice',array('id'=>$id,'billType'=>'SALE'));  
 		if (count($data)>0) {
 		    $data['checked'] >0 && str_alert(-1,'已审核的不可删除'); 

@@ -88,7 +88,7 @@ class Dataright extends CI_Controller {
 				case 2:
 				    $righttype = explode(',',$data['righttype'.$type]);
 					$where = $skey ? ' and (number like "%'.$skey.'%" or name like "%'.$skey.'%")' : '';
-					$list = $this->mysql_model->get_results('contact','(isDelete=0) and type=-10 '.$where,'id desc'); 
+					$list = $this->mysql_model->get_results('contact','(isDelete=0) and type=10 '.$where,'id desc'); 
 					foreach ($list as $arr=>$row) {
 						$v[$arr]['FITEMID']     = intval($row['id']);
 						$v[$arr]['FNAME']       = $row['name'];
@@ -99,7 +99,7 @@ class Dataright extends CI_Controller {
 				case 4:
 				    $righttype = explode(',',$data['righttype'.$type]);
 					$where = $skey ? ' and (number like "%'.$skey.'%" or name like "%'.$skey.'%")' : '';
-					$list = $this->mysql_model->get_results('contact','(isDelete=0) and type=10 '.$where,'id desc');  
+					$list = $this->mysql_model->get_results('contact','(isDelete=0) and type=-10 '.$where,'id desc');  
 					foreach ($list as $arr=>$row) {
 						$v[$arr]['FITEMID']     = intval($row['id']);
 						$v[$arr]['FNAME']       = $row['name'];

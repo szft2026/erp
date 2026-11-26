@@ -879,12 +879,12 @@ class Report extends CI_Controller {
 		foreach ($list as $arr=>$row) {
 		    $v[$arr]['dbid']        = 0;
 			$v[$arr]['debt']        = 0; 
-			$v[$arr]['displayName'] = $row['type']==10 ? '供应商' : '客户'; 
+			$v[$arr]['displayName'] = $row['type']==10 ? '客户' : '供应商'; 
 			$v[$arr]['buId']        = intval($row['id']);
 			$v[$arr]['name']        = $row['name'];
 			$v[$arr]['number']      = $row['number'];   
-			$sum1 += $v[$arr]['payable']     = $row['type']==10  ? $row['amount'] : 0; 
-			$sum2 += $v[$arr]['receivable']  = $row['type']==-10 ? $row['amount'] : 0; 
+			$sum1 += $v[$arr]['payable']     = $row['type']==-10 ? $row['amount'] : 0; 
+			$sum2 += $v[$arr]['receivable']  = $row['type']==10  ? $row['amount'] : 0; 
 			$v[$arr]['type']        = $row['type']; 
 		}
 		$data['data']['list']      = $v;

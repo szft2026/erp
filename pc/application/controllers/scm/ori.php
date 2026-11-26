@@ -192,7 +192,7 @@ class Ori extends CI_Controller {
 	//删除
     public function deleteInc() {
 	    $this->common_model->checkpurview(137);
-	    $id   = intval($this->input->get('id',TRUE));
+	    $id   = intval($this->input->get_post('id',TRUE));
 		$data = $this->mysql_model->get_rows('invoice',array('id'=>$id,'transType'=>153401));  
 		if (count($data)>0) {
 		    $this->db->trans_begin();
@@ -358,7 +358,7 @@ class Ori extends CI_Controller {
 	//删除
     public function deleteExp() {
 	    $this->common_model->checkpurview(142);
-	    $id   = intval($this->input->get('id',TRUE));
+	    $id   = intval($this->input->get_post('id',TRUE));
 		$data = $this->mysql_model->get_rows('invoice',array('id'=>$id,'transType'=>153402));  
 		if (count($data)>0) {
 		    $this->db->trans_begin();

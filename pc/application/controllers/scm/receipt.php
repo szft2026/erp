@@ -276,7 +276,7 @@ class Receipt extends CI_Controller {
 	//删除
     public function delete() {
 	    $this->common_model->checkpurview(127);
-	    $id   = intval($this->input->get('id',TRUE));
+	    $id   = intval($this->input->get_post('id',TRUE));
 		$data = $this->mysql_model->get_rows('invoice',array('id'=>$id,'transType'=>153001));  
 		if (count($data)>0) {
 		    $this->db->trans_begin();

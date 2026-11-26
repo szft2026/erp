@@ -16,7 +16,7 @@ class Customer extends CI_Controller {
 		$this->common_model->logs('导出客户:'.$name);
 		$skey         = str_enhtml($this->input->get('skey',TRUE));
 		$categoryId   = intval($this->input->get_post('categoryId',TRUE));  
-		$where = '(isDelete=0) and type=-10 ';      
+		$where = '(isDelete=0) and type=10 ';      
 		$where .= $this->common_model->get_customer_purview();
 		$where .= $categoryId>0 ? ' and cCategory = '.$categoryId.'' : ''; 
 		$where .= $skey ? ' and (number like "%'.$skey.'%" or name like "%'.$skey.'%" or linkMans like "%'.$skey.'%")' : '';        
