@@ -476,12 +476,12 @@ POST /index.php/scm/ori/addExp   → 其他支出（transType 153402）
 | 方法 | HTTP | 参数（必填） | 参数（选填） | 说明 |
 | --- | --- | --- | --- | --- |
 | `index` | GET | — | — |  |
-| `downloadtemplate1` | GET | — | — |  |
-| `downloadtemplate2` | GET | — | — |  |
-| `downloadtemplate3` | GET | — | — |  |
-| `findDataImporter` | GET | — | — |  |
-| `upload` | GET | — | — |  |
-| `uploadExcel` | GET | — | — |  |
+| `downloadtemplate1` | GET | — | — | 下载客户导入模板（`data/download/customer.xls`） |
+| `downloadtemplate2` | GET | — | — | 下载供应商导入模板（`vendor.xls`） |
+| `downloadtemplate3` | GET | — | — | 下载商品导入模板（`goods.xls`） |
+| `findDataImporter` | POST | — | — | 死代码（读 `$_FILES` 后只打印文件名就退出），未接入业务流程 |
+| `upload` | GET | — | — | 上传记录：读 `data/upfile/import` 下的真实文件与结果（不再返回写死的示例数据） |
+| `uploadExcel` | POST | file | — | `multipart/form-data`，字段名 `file`；表头必须是 `商品编号`/`客户编号`/`供应商编号`，否则返回「模板不匹配」；每次导入会在 `data/upfile/import` 留痕 |
 
 ### basedata/inventory.php
 
@@ -536,7 +536,7 @@ POST /index.php/scm/ori/addExp   → 其他支出（transType 153402）
 | 方法 | HTTP | 参数（必填） | 参数（选填） | 说明 |
 | --- | --- | --- | --- | --- |
 | `index` | GET | — | — |  |
-| `query` | POST | — | amount, date, id, name, number, type |  |
+| `query` | POST | — | amount, date, id, name, number, type | 按 id 查账户；查不到返回 `{"status":-1,"msg":"账户不存在"}` |
 | `findAmountOver` | POST | — | ids |  |
 | `add` | POST | name、number | amount, id, type |  |
 | `update` | POST | name、number | amount, id, type |  |
