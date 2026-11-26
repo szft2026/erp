@@ -94,19 +94,32 @@ class Import extends CI_Controller {
 	
 	//上传文件
 	public function upload() {
-		die('{"status":200,"msg":"success","data":{"items":[{"id":1294598139109696,"date":"2015-04-25 14:41:35","uploadPath"
-:"customer_20150425024011.xls","uploadName":"customer_20150425024011.xls","resultPath":"uploadfiles/88887901
-/customer_20150425024011.xls","resultName":"customer_20150425024011.xls","resultInfo":"商品导入完毕。<br/>商
-品一共：0条数据，成功导入：0条数据，失败：0条数据。<br/>供应商导入完毕。<br/>供应商一共：0条数据，成功导入：0条数据，失败：0条数据。<br/>客户导入完毕。<br/>客户一共：10条数
-据，成功导入：10条数据，失败：0条数据。<br/>","status":2,"spendTime":0},{"id":1294598139109659,"date":"2015-04-25 14:40
-:49","uploadPath":"customer_20150425024011.xls","uploadName":"customer_20150425024011.xls","resultPath"
-:"uploadfiles/88887901/customer_20150425024011.xls","resultName":"customer_20150425024011.xls","resultInfo"
-:"商品导入完毕。<br/>商品一共：0条数据，成功导入：0条数据，失败：0条数据。<br/>供应商导入完毕。<br/>供应商一共：0条数据，成功导入：0条数据，失败：0条数据。<br/>客户导入完毕
-。<br/>客户一共：10条数据，成功导入：10条数据，失败：0条数据。<br/>","status":2,"spendTime":0},{"id":1294597559113847,"date":"2015-04-17
- 16:54:39","uploadPath":"蓝港新系统xls.xls","uploadName":"蓝港新系统xls.xls","resultPath":"uploadfiles/88887901
-/蓝港新系统xls.xls","resultName":"蓝港新系统xls.xls","resultInfo":"商品导入完毕。<br/>商品一共：557条数据，成功导入：0条数据，失败：557条数据
-。<br/>(请检查模板是否匹配，建议重新下载模板导入)<br/>供应商导入完毕。<br/>供应商一共：0条数据，成功导入：0条数据，失败：0条数据。<br/>客户导入完毕。<br/>客户一共：0条数
-据，成功导入：0条数据，失败：0条数据。<br/>","status":2,"spendTime":0}],"totalsize":3}}');  
+	    // 真实导入历史：读 data/upfile/import 下每次导入保存的文件与结果
+	    $dir   = './data/upfile/import/';
+	    $items = array();
+	    if (is_dir($dir)) {
+	        $files = glob($dir.'*.json');
+	        if (is_array($files)) {
+	            usort($files, function($a, $b){ return @filemtime($b) - @filemtime($a); });
+	            $i = 0;
+	            foreach ($files as $j) {
+	                $meta = json_decode(@file_get_contents($j), true);
+	                if (!is_array($meta)) continue;
+	                $items[$i]['id']         = intval(@filemtime($j));
+	                $items[$i]['date']       = isset($meta['date']) ? $meta['date'] : date('Y-m-d H:i:s', @filemtime($j));
+	                $items[$i]['uploadPath'] = isset($meta['file']) ? $meta['file'] : '';
+	                $items[$i]['uploadName'] = isset($meta['name']) ? $meta['name'] : '';
+	                $items[$i]['resultPath'] = $items[$i]['uploadPath'];
+	                $items[$i]['resultName'] = $items[$i]['uploadName'];
+	                $items[$i]['resultInfo'] = isset($meta['result']) ? $meta['result'] : '';
+	                $items[$i]['status']     = 2;
+	                $items[$i]['spendTime']  = isset($meta['spendTime']) ? $meta['spendTime'] : 0;
+	                $i++;
+	            }
+	        }
+	    }
+	    die(json_encode(array('status'=>200,'msg'=>'success',
+	        'data'=>array('items'=>$items,'totalsize'=>count($items))), JSON_UNESCAPED_UNICODE));
 	}
 	
 	public function uploadExcel() {
@@ -117,6 +130,21 @@ class Import extends CI_Controller {
 	        str_alert(-1,'上传文件大小超过限制！');
 	    if($path['type']!='application/vnd.ms-excel' && strrchr($path['name'],'xls')!='xls')
 	        str_alert(200,'上传的文件不是excel类型！');
+        // 落盘 + 记录导入历史，成功后再回写结果；失败也能在「上传记录」里看到
+        $hist_dir = './data/upfile/import/';
+        if (!is_dir($hist_dir)) { @mkdir($hist_dir, 0777, true); }
+        $hist_base = date('YmdHis').'_'.preg_replace('/[\x00-\x1f\/\\\\:*?"<>|]/','_',basename($path['name']));
+        $hist_file = $hist_dir.$hist_base;
+        @copy($path['tmp_name'], $hist_file);
+        $hist = array(
+            'date'      => date('Y-m-d H:i:s'),
+            'name'      => $path['name'],
+            'file'      => $hist_base,
+            'size'      => @filesize($hist_file),
+            'result'    => '导入未完成：中途校验失败，请检查模板与基础资料（类别/仓库/单位）',
+            'spendTime' => 0,
+        );
+        @file_put_contents($hist_file.'.json', json_encode($hist, JSON_UNESCAPED_UNICODE));
         //$filePath = "data/upload/".$path["name"];
         //move_uploaded_file($path["tmp_name"],$filePath);
         
@@ -314,6 +342,8 @@ class Import extends CI_Controller {
 			str_alert(-1,'SQL错误回滚');
 		} else {
 		    $this->db->trans_commit();
+			$hist['result'] = '恭喜您，导入'.$itype.'信息成功！';
+			@file_put_contents($hist_file.'.json', json_encode($hist, JSON_UNESCAPED_UNICODE));
 			str_alert(200,'恭喜您，导入'.$itype.'信息成功！');
 		}
 	}
