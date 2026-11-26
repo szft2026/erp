@@ -92,6 +92,7 @@ function v($data,$pos) {
 	return ord($data[$pos]) | ord($data[$pos+1])<<8;
 }
 
+#[\AllowDynamicProperties]
 class OLERead {
 	var $data = '';
 	function OLERead(){	}
@@ -309,6 +310,7 @@ define('SPREADSHEET_EXCEL_READER_DEF_NUM_FORMAT',	"%s");
 /*
 * Main Class
 */
+#[\AllowDynamicProperties]
 class Excel_reader2 {
 
 	// MK: Added to make data retrieval easier
@@ -542,7 +544,7 @@ class Excel_reader2 {
 		}
 		return null;
 	}
-	function fontProperty($row,$col,$sheet=0,$prop) {
+	function fontProperty($row,$col,$sheet=0,$prop=null) {
 		$font = $this->fontRecord($row,$col,$sheet);
 		if ($font!=null) {
 			return $font[$prop];
@@ -925,7 +927,7 @@ class Excel_reader2 {
 			$this->setOutputEncoding($outputEncoding);
 		}
 		for ($i=1; $i<245; $i++) {
-			$name = strtolower(( (($i-1)/26>=1)?chr(($i-1)/26+64):'') . chr(($i-1)%26+65));
+			$name = strtolower(( (($i-1)/26>=1)?chr(intval(($i-1)/26)+64):'') . chr(intval(($i-1)%26)+65));
 			$this->colnames[$name] = $i;
 			$this->colindexes[$i] = $name;
 		}
