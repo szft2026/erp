@@ -198,7 +198,8 @@ POST /index.php/scm/ori/addExp   → 其他支出（transType 153402）
 
 ## 三、接口清单
 
-**说明**：`noteprinttemp/index`、`prints/index`、`service/recover`、`basedata/warranty/index` 是原产品遗留的空方法，
+**说明**：前端「采购订单」页面调用的 `scm/invPo/*`（add、checkInvPo、toPdf 等）在本项目中**没有对应控制器**，
+访问均为 404，属原产品缺失；销售订单 `scm/invSo/*` 完整可用。`noteprinttemp/index`、`prints/index`、`service/recover`、`basedata/warranty/index` 是原产品遗留的空方法，
 调用返回 0 字节，属未实现功能而非升级缺陷；`basedata/import/findDataImporter`、`basedata/contact/my_filter`、
 `scm/backup/create_folders`、`scm/invSa/log` 为内部函数/死代码。
 

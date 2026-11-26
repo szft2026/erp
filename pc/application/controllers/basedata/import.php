@@ -269,7 +269,7 @@ class Import extends CI_Controller {
                 $linkMan['id'] = 0;
                 $linkMans[0] = $linkMan;
                 $cust['linkMans'] = json_encode($linkMans);
-                $cust['type'] = -10;
+                $cust['type'] = 10;   // 10=客户（与前端 customerCombo/customerList 一致）
                 empty($row[1])&&str_alert(-1,'第'.$arr.'行客户编号不能为空！');
                 empty($row[2])&&str_alert(-1,'第'.$arr.'行客户名称不能为空！');
                 empty($row[3])&&str_alert(-1,'第'.$arr.'行客户类别不能为空！');
@@ -286,10 +286,10 @@ class Import extends CI_Controller {
                 );
                 $info = elements($info,$cust,NULL);
 				//die(var_export($cust,true));
-                if($this->mysql_model->get_count('contact',array('isDelete'=>0,'number'=>$cust['number'],'type'=>-10)) <= 0){
+                if($this->mysql_model->get_count('contact',array('isDelete'=>0,'number'=>$cust['number'],'type'=>10)) <= 0){
                     $rtn['id'] = $this->mysql_model->insert('contact',$info);
                 }else {
-                    $this->mysql_model->update('contact',$info,array('number'=>$cust['number'],'type'=>-10));
+                    $this->mysql_model->update('contact',$info,array('number'=>$cust['number'],'type'=>10));
                 }
             }
         }else if($first[1]=='供应商编号'){
@@ -313,7 +313,7 @@ class Import extends CI_Controller {
                 $linkMan['id'] = 0;
                 $linkMans[0] = $linkMan;
                 $sup['linkMans'] = json_encode($linkMans);
-                $sup['type'] = 10;
+                $sup['type'] = -10;  // -10=供应商
                 empty($row[1])&&str_alert(-1,'第'.$arr.'行供应商编号不能为空！');
                 empty($row[2])&&str_alert(-1,'第'.$arr.'行供应商名称不能为空！');
                 empty($row[3])&&str_alert(-1,'第'.$arr.'行供应商类别不能为空！');
@@ -330,10 +330,10 @@ class Import extends CI_Controller {
                 );
                 $info = elements($info,$sup,NULL);
             
-                if($this->mysql_model->get_count('contact',array('isDelete'=>0,'number'=>$sup['number'],'type'=>10)) <= 0){
+                if($this->mysql_model->get_count('contact',array('isDelete'=>0,'number'=>$sup['number'],'type'=>-10)) <= 0){
                     $rtn['id'] = $this->mysql_model->insert('contact',$info);
                 }else {
-                    $this->mysql_model->update('contact',$info,array('number'=>$sup['number'],'type'=>10));
+                    $this->mysql_model->update('contact',$info,array('number'=>$sup['number'],'type'=>-10));
                 }
             }
         }
