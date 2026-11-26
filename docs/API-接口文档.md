@@ -2,8 +2,9 @@
 
 > 版本：PHP 8 升级版　|　框架：CodeIgniter 2.2.5（已适配 PHP 8.2）　|　数据库：MySQL 8
 
-共 **43 个控制器、357 个公开接口**。本轮实测覆盖：7 类单据打印、41 个写接口（空参数 / 全参数两轮）、
-12 步「单据 → 库存 → 应收应付」联动回归。私有方法与内部回调（`validform`、`my_filter` 等）不计入。
+共 **43 个控制器、357 个公开接口**。本轮实测覆盖：全量冒烟 354 个接口（0 个 5xx / DB 错误 / 致命错误）、
+7 类单据打印、41 个写接口（空参数 / 全参数两轮）、12 步「单据 → 库存 → 应收应付」联动回归。
+测试环境、逐条结果与复现命令见 `docs/测试报告.md`。私有方法与内部回调（`validform`、`my_filter` 等）不计入。
 
 ## 一、通用约定
 
@@ -195,6 +196,10 @@ POST /index.php/scm/ori/addExp   → 其他支出（transType 153402）
 4. 删除接口统一接受 GET 或 POST 的 `id`（本轮修复，之前部分接口只认 GET）。
 
 ## 三、接口清单
+
+**说明**：`noteprinttemp/index`、`prints/index`、`service/recover`、`basedata/warranty/index` 是原产品遗留的空方法，
+调用返回 0 字节，属未实现功能而非升级缺陷；`basedata/import/findDataImporter`、`basedata/contact/my_filter`、
+`scm/backup/create_folders`、`scm/invSa/log` 为内部函数/死代码。
 
 **必填** 由源码校验函数自动提取（`strlen()<1`、`intval()<1`、`count()<1`、`!$x`），并已用「空参数 / 全参数」两轮实测核对（41 个写接口，见附录 A）。「选填」不代表业务上无意义——例如类别/仓库是否存在、库存是否足够，仍会在保存时报错。
 

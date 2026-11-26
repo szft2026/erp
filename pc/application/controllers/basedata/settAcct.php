@@ -47,7 +47,9 @@ class Settacct extends CI_Controller {
 			$json['data']['number']   = $data['number'];
 			$json['data']['type']     = intval($data['type']);
 			die(json_encode($json)); 
-		}	
+		}
+		// 查不到时给 JSON，避免前端拿到 0 字节
+		str_alert(-1,'账户不存在');
 	}
 	
 	//当前余额
