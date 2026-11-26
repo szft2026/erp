@@ -17,6 +17,7 @@
 | 请求体 | 默认 `application/x-www-form-urlencoded`；单据类接口（`scm/*`）把整张单据塞进单字段 `postData`（JSON 字符串）；批量审核/删除用普通表单 `id` |
 | 响应 | 成功：`{"status":200,"msg":"success","data":{...}}`；失败：`{"status":-1,"msg":"<中文原因>","data":[]}`，**HTTP 状态码仍是 200**，必须看 `status` 字段 |
 | 例外 | `login` 成功返回纯文本 `1`；`toPdf` 返回 `application/pdf`；`exporter` 返回 XLS |
+| 参数位置 | **部分参数只认 URL query**：`basedata/contact/index` 的 `type`、`basedata/assist/index` 的 `typeNumber`、`scm/invOi/index` 与 `scm/ori/index` 的 `action`、`scm/invPu|invSa|invTf/toPdf` 的 `id` 等，源码用的是 `input->get()`。放进 POST body 读不到，会走默认分支（典型现象：客户下拉返回供应商、类别列表为空） |
 | 编码 | UTF-8，时间均为北京时间（UTC+8） |
 
 ## 二、核心业务流程（全部实测）
